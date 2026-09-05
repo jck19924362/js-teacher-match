@@ -1,0 +1,1984 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>江苏教师招聘智能匹配</title>
+  <!-- v20260831-green-rebuild 江苏版重建·绿色主题 -->
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue: #1F8A4C;
+      --blue-deep: #0F5A32;
+      --blue-bright: #35A863;
+      --blue-soft: #EAF6F0;
+      --bg: #F3F8F5;
+      --ink: #1A2A22;
+      --ink-sub: #55685E;
+      --line: #DFEAE3;
+      --ok: #17A66B;
+      --maybe: #F08A24;
+      --no: #E5484D;
+      --violet: #0D9488;
+    }
+    body {
+      font-family: -apple-system, "PingFang SC", "微软雅黑", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    .header {
+      background: linear-gradient(135deg, #0A3D24 0%, #0F5A32 40%, #1F8A4C 75%, #35A863 100%);
+      color: #fff;
+      padding: 40px 16px 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: ""; position: absolute; top: -80px; right: -50px;
+      width: 280px; height: 280px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.14) 0%, transparent 70%);
+      z-index: 0;
+    }
+    .header::after {
+      content: ""; position: absolute; bottom: -60px; left: -60px;
+      width: 240px; height: 240px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.10) 0%, transparent 70%);
+      z-index: 0;
+    }
+    .header .deco-dot {
+      position: absolute; width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(255,255,255,0.35);
+    }
+    .header h1 {
+      font-size: 30px; margin-bottom: 10px; letter-spacing: 1px; position: relative; font-weight: 800;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.18);
+    }
+    .header .slogan { font-size: 15px; opacity: 0.92; margin-bottom: 24px; position: relative; font-weight: 400; letter-spacing: 0.5px; }
+    .header .hero-stats {
+      display: flex; justify-content: center; gap: 28px; position: relative; margin-bottom: 26px;
+    }
+    .header .hero-stat { text-align: center; }
+    .header .hero-stat .num { font-size: 24px; font-weight: 800; line-height: 1.1; }
+    .header .hero-stat .lab { font-size: 12px; opacity: 0.82; margin-top: 2px; }
+
+    /* 学段导航 */
+    .stage-nav {
+      display: flex;
+      background: rgba(255,255,255,0.14);
+      backdrop-filter: blur(8px);
+      border-radius: 16px 16px 0 0;
+      margin: 0 16px;
+      padding: 6px 6px 0;
+      position: relative;
+      z-index: 2;
+    }
+    .stage-tab {
+      flex: 1;
+      padding: 12px 4px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 13.5px;
+      color: rgba(255,255,255,0.78);
+      border-radius: 12px 12px 0 0;
+      transition: all 0.22s;
+      position: relative;
+      user-select: none;
+    }
+    .stage-tab .icon { font-size: 21px; display: block; margin-bottom: 2px; transition: transform 0.22s; }
+    .stage-tab:hover { color: #fff; background: rgba(255,255,255,0.08); }
+    .stage-tab:hover .icon { transform: translateY(-2px); }
+    .stage-tab.active {
+      color: var(--blue-deep);
+      background: #fff;
+      font-weight: bold;
+      box-shadow: 0 -4px 14px rgba(0,0,0,0.10);
+    }
+    .stage-tab.active .icon { transform: translateY(-2px); }
+
+    .container {
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 0 16px 24px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 0 0 18px 18px;
+      padding: 26px 22px;
+      box-shadow: 0 1px 2px rgba(26,34,51,0.04), 0 16px 40px rgba(15,90,50,0.10);
+      margin-bottom: 16px;
+    }
+    .card.round { border-radius: 18px; }
+    .section-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 18px;
+      padding-left: 13px;
+      position: relative;
+      letter-spacing: 0.5px;
+    }
+    .section-title::before {
+      content: ""; position: absolute; left: 0; top: 2px; bottom: 2px;
+      width: 5px; border-radius: 5px;
+      background: linear-gradient(180deg, var(--blue-bright), var(--violet));
+    }
+    .form-group { margin-bottom: 22px; }
+    .form-group > label {
+      display: block;
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 9px;
+      color: #2C3E50;
+    }
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .options label {
+      font-weight: normal;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 14px;
+      background: #F7F9FC;
+      border-radius: 999px;
+      border: 1.5px solid var(--line);
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--ink-sub);
+      transition: all 0.18s;
+      position: relative;
+      user-select: none;
+    }
+    .options label input {
+      position: absolute; opacity: 0; width: 0; height: 0; margin: 0;
+    }
+    .options label:hover {
+      border-color: var(--blue-bright);
+      color: var(--blue);
+      background: #EEF9F3;
+    }
+    .options label.active {
+      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-bright) 100%);
+      border-color: var(--blue);
+      color: #fff;
+      font-weight: bold;
+      box-shadow: 0 4px 12px rgba(31,138,76,0.30);
+    }
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid var(--line);
+      border-radius: 10px;
+      font-size: 14px;
+      background: #fff;
+      margin-bottom: 10px;
+      color: var(--ink);
+      transition: border-color 0.18s, box-shadow 0.18s;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235E6D7E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 14px;
+    }
+    select:focus, textarea:focus, .custom-honor-row input:focus, #majorCustom:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(31,138,76,0.14);
+    }
+    textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1.5px solid var(--line);
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: inherit;
+      resize: vertical;
+      transition: border-color 0.18s, box-shadow 0.18s;
+    }
+    #majorCustom {
+      transition: border-color 0.18s, box-shadow 0.18s;
+    }
+    .cert-group-title {
+      font-size: 12px;
+      color: var(--blue);
+      font-weight: bold;
+      margin: 12px 0 7px;
+      padding: 3px 10px;
+      background: var(--blue-soft);
+      border-radius: 6px;
+      display: inline-block;
+      letter-spacing: 0.5px;
+    }
+    .btn-save {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--blue-deep) 0%, var(--blue) 50%, var(--violet) 100%);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      font-size: 16.5px;
+      font-weight: 800;
+      cursor: pointer;
+      letter-spacing: 3px;
+      box-shadow: 0 6px 20px rgba(31,138,76,0.38);
+      transition: all 0.22s;
+      margin-top: 6px;
+    }
+    .btn-save:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(31,138,76,0.46); }
+    .btn-save:active { transform: translateY(0); opacity: 0.94; }
+    .msg {
+      text-align: center;
+      margin-top: 12px;
+      font-size: 14px;
+      color: var(--ok);
+      font-weight: bold;
+      min-height: 20px;
+    }
+    .hint { font-size: 12px; color: #8A97A5; margin-top: 6px; line-height: 1.5; }
+
+    /* 自定义荣誉 */
+    .custom-honor-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .custom-honor-row input {
+      flex: 1;
+      padding: 9px 12px;
+      border: 1.5px solid var(--line);
+      border-radius: 10px;
+      font-size: 14px;
+      transition: border-color 0.18s, box-shadow 0.18s;
+    }
+    .custom-honor-row button {
+      padding: 9px 16px;
+      background: linear-gradient(135deg, var(--blue), var(--blue-bright));
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: opacity 0.18s;
+      white-space: nowrap;
+    }
+    .custom-honor-row button:hover { opacity: 0.88; }
+    .honor-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 12px;
+      background: var(--blue-soft);
+      border: 1.5px solid var(--blue);
+      border-radius: 999px;
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.18s;
+    }
+    .honor-tag:hover { background: #D5F0E2; }
+    .honor-tag .del { color: var(--no); font-weight: bold; }
+
+    /* 筛选开关 */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fff;
+      border-radius: 14px;
+      padding: 13px 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 3px rgba(31,45,61,0.05), 0 6px 18px rgba(31,138,76,0.06);
+      font-size: 14px;
+      color: #2C3E50;
+    }
+    .switch { position: relative; width: 46px; height: 26px; flex-shrink: 0; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: #CBD5E0; border-radius: 26px; cursor: pointer; transition: 0.25s;
+    }
+    .slider:before {
+      content: ""; position: absolute; height: 20px; width: 20px;
+      left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: 0.25s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .switch input:checked + .slider { background: linear-gradient(135deg, var(--blue), var(--blue-bright)); }
+    .switch input:checked + .slider:before { transform: translateX(20px); }
+
+    #resultArea { margin-top: 8px; }
+    .job-card {
+      border-radius: 14px;
+      padding: 15px 15px 15px 17px;
+      margin-bottom: 12px;
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--line);
+      cursor: pointer;
+      background: #fff;
+      transition: all 0.18s;
+      position: relative;
+      box-shadow: 0 1px 2px rgba(26,34,51,0.03);
+    }
+    .job-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px rgba(15,90,50,0.14);
+    }
+    .job-card:active { transform: scale(0.99); }
+    .job-card.ok { background: #F3FAF5; border-left-color: var(--ok); }
+    .job-card.maybe { background: #FFFAF1; border-left-color: var(--maybe); }
+    .job-card.no { background: #FDF4F4; border-left-color: var(--no); }
+    .job-title { font-weight: bold; font-size: 15px; color: var(--blue-deep); overflow: hidden; }
+    .job-status {
+      float: right; font-size: 12px; font-weight: bold;
+      padding: 2px 10px; border-radius: 999px; margin-top: 1px;
+    }
+    .job-card.ok .job-status { background: var(--ok); color: #fff; }
+    .job-card.maybe .job-status { background: var(--maybe); color: #fff; }
+    .job-card.no .job-status { background: #C9CFD6; color: #fff; }
+    .job-info { font-size: 14px; margin-top: 7px; font-weight: bold; color: var(--ink); }
+    .job-sub { font-size: 12px; color: var(--ink-sub); margin-top: 4px; }
+    .job-tip { color: var(--maybe); font-size: 12px; margin-top: 6px; }
+    .job-reason { color: var(--no); font-size: 12px; margin-top: 6px; }
+    .job-cohort { background: #EAF6F0; border: 1px solid #BBDCCB; border-radius: 8px; padding: 6px 10px; color: #1F6B45; font-size: 12px; margin: 6px 0; line-height: 1.5; }
+    .job-card.cohort { background: #F4FAF7; border-left-color: #0D9488; }
+    .job-card.cohort .job-status { background: #0D9488; color: #fff; }
+    .sub-group-title { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 700; color: var(--ink); margin: 16px 0 8px; padding-bottom: 6px; border-bottom: 1px dashed var(--line); }
+    .sub-group-title .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+    .sub-group-title .dot.cohort { background: #0D9488; }
+    .sub-group-title .dot.real { background: var(--no); }
+    .job-note { color: #8A97A5; font-size: 12px; margin-top: 6px; }
+    .job-hit {
+      color: var(--ok); font-size: 12px; margin-top: 6px;
+      background: rgba(46,158,91,0.08); border: 1px solid rgba(46,158,91,0.25);
+      border-radius: 8px; padding: 4px 8px; font-weight: 600;
+    }
+    .job-source { font-size: 12px; color: #8A97A5; margin-top: 8px; }
+    .badge-early {
+      background: linear-gradient(135deg, #D64545, #E85D5D); color: #fff; font-size: 11px;
+      padding: 2px 8px; border-radius: 999px; margin-left: 6px; font-weight: normal;
+      vertical-align: 1px;
+    }
+    .badge-year {
+      background: linear-gradient(135deg, #0F5A32, #1F8A4C); color: #fff; font-size: 11px;
+      padding: 2px 8px; border-radius: 999px; margin-left: 6px; font-weight: normal;
+      vertical-align: 1px;
+    }
+    .badge-bianzhi {
+      background: linear-gradient(135deg, #2E9E5B, #3DB86D); color: #fff; font-size: 11px;
+      padding: 2px 8px; border-radius: 999px; margin-left: 6px; font-weight: normal;
+      vertical-align: 1px;
+    }
+    .fresh-bar {
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+      background: #F7F9FC; border: 1px solid var(--line);
+      border-radius: 10px; padding: 9px 12px; margin: 8px 0 12px;
+      font-size: 12.5px; color: var(--ink-sub); line-height: 1.6;
+    }
+    .fresh-bar .f-tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: #fff; border: 1px solid var(--line);
+      border-radius: 999px; padding: 2px 10px; font-size: 12px; color: var(--ink);
+    }
+    .fresh-bar .f-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+    .f-dot.live { background: #17A66B; }
+    .f-dot.soon { background: #E5484D; }
+    .f-dot.ended { background: #C9CFD6; }
+    .f-dot.unknown { background: #B9C2CE; }
+    .site-foot {
+      text-align: center; font-size: 12px; color: #8A97A5;
+      padding: 18px 16px 28px; line-height: 1.8;
+      border-top: 0.5px solid var(--line); margin-top: 24px;
+    }
+    .site-foot a { color: #8A97A5; }
+    .site-foot-stat {
+      margin-top: 10px; font-size: 12px; color: #B9C2CE;
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 3px 12px; border-radius: 999px;
+      background: rgba(155,155,155,0.06);
+    }
+    .summary { font-size: 14px; color: var(--ink-sub); margin-bottom: 14px; }
+    .summary b { font-size: 16px; }
+    .summary-bar {
+      display: flex; gap: 10px; margin: 10px 0 14px;
+    }
+    .summary-item {
+      flex: 1; text-align: center; padding: 12px 6px 8px; border-radius: 14px;
+      background: #fff; border: 1px solid var(--line); position: relative; overflow: hidden;
+      cursor: pointer; transition: all 0.18s; box-shadow: 0 2px 6px rgba(31,45,61,0.04);
+      user-select: none;
+    }
+    .summary-item.active { box-shadow: 0 0 0 2px currentColor; }
+    .summary-item:active { transform: scale(0.97); }
+    .summary-item::after {
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    }
+    .summary-item .n { font-size: 26px; font-weight: 800; line-height: 1.1; }
+    .summary-item .t { font-size: 12px; color: var(--ink-sub); margin-top: 2px; }
+    .summary-item.ok { background: linear-gradient(135deg, #EDFBF3, #F4FDF8); border-color: #C9EBD8; }
+    .summary-item.ok::after { background: var(--ok); }
+    .summary-item.ok .n { color: var(--ok); }
+    .summary-item.maybe { background: linear-gradient(135deg, #FFF6EA, #FFFAF1); border-color: #F5DFBE; }
+    .summary-item.maybe::after { background: var(--maybe); }
+    .summary-item.maybe .n { color: var(--maybe); }
+    .summary-item.no { background: linear-gradient(135deg, #FDF0F0, #FEF7F7); border-color: #F3D2D2; }
+    .summary-item.no::after { background: var(--no); }
+    .summary-item.no .n { color: var(--no); }
+    .summary-item .jump-hint {
+      font-size: 10px; color: #A0AAB8; margin-top: 2px; opacity: 0; transition: opacity 0.18s;
+    }
+    .summary-item:hover .jump-hint { opacity: 1; }
+    .empty-tip { text-align: center; color: #9AA7B4; font-size: 14px; padding: 36px 0; }
+
+    /* 不符分类下的两个子方块 */
+    .sub-bar { display: flex; gap: 10px; margin: 4px 0 12px; }
+    .sub-item {
+      flex: 1; text-align: center; padding: 10px 6px 8px; border-radius: 12px;
+      background: #fff; border: 1px solid var(--line); cursor: pointer; transition: all 0.18s;
+      box-shadow: 0 2px 6px rgba(31,45,61,0.04); position: relative; overflow: hidden;
+      user-select: none;
+    }
+    .sub-item:active { transform: scale(0.97); }
+    .sub-item::after { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+    .sub-item .n { font-size: 22px; font-weight: 800; line-height: 1.1; }
+    .sub-item .t { font-size: 12.5px; font-weight: 700; margin-top: 2px; }
+    .sub-item .hint { font-size: 10px; color: #A0AAB8; margin-top: 2px; }
+    .sub-item.cohort { background: linear-gradient(135deg, #E7F5EE, #F0FAF5); border-color: #B7DCC8; }
+    .sub-item.cohort::after { background: var(--blue); }
+    .sub-item.cohort .n { color: var(--blue); }
+    .sub-item.cohort .t { color: var(--blue-deep); }
+    .sub-item.real { background: linear-gradient(135deg, #FDF0F0, #FEF7F7); border-color: #F3D2D2; }
+    .sub-item.real::after { background: var(--no); }
+    .sub-item.real .n { color: var(--no); }
+    .sub-item.real .t { color: #B2453E; }
+    .sub-item.active { box-shadow: 0 0 0 2px currentColor; }
+    .sub-item.cohort.active { color: var(--blue); }
+    .sub-item.real.active { color: #B2453E; }
+
+
+    /* 收藏 */
+    .fav-btn {
+      position: absolute; right: 10px; bottom: 10px; width: 34px; height: 34px;
+      border-radius: 50%; border: 1px solid var(--line); background: #fff;
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+      font-size: 18px; line-height: 1; transition: all 0.18s; z-index: 2;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+    .fav-btn:hover { transform: scale(1.08); border-color: #F4C542; }
+    .fav-btn.active { background: #FFF9E6; border-color: #F4C542; }
+    .fav-btn .star { color: #C9CFD6; transition: color 0.18s; }
+    .fav-btn.active .star { color: #F4C542; }
+
+    /* 浮动时间线入口 */
+    .fab-timeline {
+      position: fixed; right: 14px; bottom: 22px; z-index: 90;
+      background: linear-gradient(135deg, var(--blue-deep), var(--blue));
+      color: #fff; border: none; border-radius: 50px; padding: 12px 18px;
+      font-size: 14px; font-weight: bold; cursor: pointer;
+      box-shadow: 0 6px 20px rgba(15,90,50,0.34);
+      display: flex; align-items: center; gap: 6px;
+      transition: all 0.22s;
+    }
+    .fab-timeline:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(15,90,50,0.42); }
+    .fab-timeline .badge {
+      background: #fff; color: var(--blue-deep); font-size: 11px; font-weight: bold;
+      min-width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    }
+
+    /* 时间线弹窗 */
+    .timeline-modal { max-height: 92vh; }
+    .timeline-head {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid #EDF1F6;
+    }
+    .timeline-title { font-size: 17px; font-weight: bold; color: var(--blue-deep); }
+    .timeline-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+    .timeline-actions button {
+      font-size: 12px; border: 1px solid var(--line); background: #fff; border-radius: 8px;
+      padding: 6px 10px; cursor: pointer; color: var(--ink-sub); transition: all 0.18s;
+    }
+    .timeline-actions button:hover { background: #F2F5F9; border-color: #C8D2E0; }
+    .timeline-chart-wrap {
+      background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 14px;
+      margin-bottom: 14px;
+    }
+    .timeline-axis-list { position: relative; padding-left: 22px; }
+    .timeline-axis-list::before {
+      content: ""; position: absolute; left: 6px; top: 8px; bottom: 8px;
+      width: 3px; border-radius: 3px; background: #DFEAE3;
+    }
+    .timeline-node {
+      position: relative; padding: 0 0 18px 18px;
+      display: flex; align-items: flex-start; gap: 12px;
+    }
+    .timeline-node:last-child { padding-bottom: 0; }
+    .timeline-node .dot {
+      position: absolute; left: -19px; top: 2px; width: 14px; height: 14px;
+      border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 3px currentColor;
+      background: #fff; z-index: 1;
+    }
+    .timeline-node.ok .dot { color: var(--ok); }
+    .timeline-node.maybe .dot { color: var(--maybe); }
+    .timeline-node.no .dot { color: #C9CFD6; }
+    .timeline-node .date {
+      flex-shrink: 0; width: 64px; font-size: 12px; font-weight: bold;
+      color: var(--ink); line-height: 1.4; margin-top: 1px;
+    }
+    .timeline-node .date small {
+      display: block; font-size: 11px; color: var(--ink-sub); font-weight: normal;
+    }
+    .timeline-node .card {
+      flex: 1; min-width: 0; background: #F8FAFC; border: 1px solid var(--line);
+      border-radius: 10px; padding: 10px 12px; cursor: pointer; transition: all 0.18s;
+    }
+    .timeline-node .card:hover { border-color: var(--blue); background: #fff; box-shadow: 0 4px 12px rgba(31,138,76,0.08); }
+    .timeline-node .card-title {
+      font-size: 14px; font-weight: bold; color: var(--ink);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px;
+    }
+    .timeline-node .card-meta {
+      font-size: 12px; color: var(--ink-sub); line-height: 1.5;
+    }
+    .timeline-node .card-status {
+      display: inline-block; font-size: 11px; font-weight: bold;
+      padding: 1px 7px; border-radius: 999px; color: #fff; margin-left: 6px;
+    }
+    .timeline-node.ok .card-status { background: var(--ok); }
+    .timeline-node.maybe .card-status { background: var(--maybe); }
+    .timeline-node.no .card-status { background: #C9CFD6; }
+    .timeline-node .card-actions {
+      display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;
+    }
+    .timeline-node .card-actions a, .timeline-node .card-actions button {
+      font-size: 12px; padding: 4px 8px; border-radius: 6px; text-decoration: none;
+      border: 1px solid var(--line); background: #fff; color: var(--blue); cursor: pointer; transition: all 0.18s;
+    }
+    .timeline-node .card-actions a:hover, .timeline-node .card-actions button:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .timeline-legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 12px; color: var(--ink-sub); margin-bottom: 12px; }
+    .timeline-legend span { display: inline-flex; align-items: center; gap: 4px; }
+    .timeline-legend i { width: 12px; height: 12px; border-radius: 3px; }
+    .fav-list { max-height: 340px; overflow-y: auto; }
+    .fav-item {
+      display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+      background: #fff; border: 1px solid var(--line); border-radius: 12px;
+      margin-bottom: 8px; cursor: pointer; transition: all 0.18s;
+    }
+    .fav-item:hover { border-color: var(--blue); }
+    .fav-item .fav-status { flex-shrink: 0; font-size: 11px; padding: 2px 8px; border-radius: 999px; color: #fff; font-weight: bold; }
+    .fav-item .fav-status.ok { background: var(--ok); }
+    .fav-item .fav-status.maybe { background: var(--maybe); }
+    .fav-item .fav-status.no { background: #C9CFD6; }
+    .fav-item .fav-status.ended { background: #8A97A5; }
+    .fav-item .fav-info { flex: 1; min-width: 0; }
+    .fav-item .fav-title { font-size: 14px; font-weight: bold; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .fav-item .fav-sub { font-size: 12px; color: var(--ink-sub); }
+    .fav-item .fav-del { color: #C9CFD6; cursor: pointer; font-size: 18px; padding: 4px; }
+    .fav-item .fav-del:hover { color: var(--no); }
+
+    /* 弹窗 */
+    .modal-overlay {
+      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(18,32,48,0.5); z-index: 100;
+      justify-content: center; align-content: flex-end;
+      backdrop-filter: blur(2px);
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: #fff; width: 100%; max-width: 640px; max-height: 85vh;
+      border-radius: 20px 20px 0 0; padding: 14px 24px 24px; overflow-y: auto;
+      animation: slideUp 0.25s ease;
+      box-shadow: 0 -8px 30px rgba(0,0,0,0.18);
+    }
+    .modal::before {
+      content: ""; display: block; width: 40px; height: 4px;
+      background: #D8E0EA; border-radius: 4px; margin: 4px auto 14px;
+    }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .modal-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid #EDF1F6;
+    }
+    .modal-title { font-size: 17px; font-weight: bold; color: var(--blue-deep); }
+    .modal-close {
+      font-size: 18px; color: var(--ink-sub); background: #F2F5F9; border: none; cursor: pointer;
+      width: 32px; height: 32px; border-radius: 50%; line-height: 30px; text-align: center;
+      transition: all 0.18s; flex-shrink: 0;
+    }
+    .modal-close:hover { background: var(--blue-soft); color: var(--blue); }
+    .modal-row {
+      margin-bottom: 12px; font-size: 14px;
+      background: #F8FAFC; border-radius: 10px; padding: 10px 12px;
+      line-height: 1.75; word-break: normal; overflow-wrap: anywhere;
+    }
+    .modal-label {
+      color: var(--blue); font-size: 12px; margin-bottom: 3px;
+      font-weight: bold; letter-spacing: 0.5px;
+    }
+    .modal-link {
+      display: inline-block; padding: 10px 16px;
+      background: linear-gradient(135deg, var(--blue), var(--blue-bright));
+      color: #fff !important; border-radius: 10px; text-align: center;
+      text-decoration: none; font-size: 14px; font-weight: bold;
+      box-shadow: 0 4px 12px rgba(31,138,76,0.3);
+      transition: all 0.2s; border: none;
+    }
+    .modal-link:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(31,138,76,0.4); }
+
+    /* 免责声明 + 分组折叠 + 移动端适配 */
+    .disclaimer { background:#FFF8E1; border:1px solid #F5E1A4; color:#8A6D1B; font-size:12.5px; padding:8px 12px; border-radius:10px; margin:10px 0; line-height:1.6; }
+    .disclaimer b { color:#B45309; }
+    .disclaimer #dataUpdated { font-weight:bold; color:#B45309; }
+    .group-toggle { font-size:13px; color:var(--blue); cursor:pointer; padding:9px 4px; margin-top:8px; user-select:none; border-top:1px dashed var(--line); }
+    .group-toggle:hover { text-decoration:underline; }
+    .group-body { margin-top:2px; }
+    .job-more { display:inline-block; font-size:11.5px; color:#8AA0B5; margin-top:6px; }
+    .job-foot { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:8px; }
+    .job-att { font-size:12px; color:var(--blue); text-decoration:none; border:1px solid var(--line); border-radius:6px; padding:2px 7px; }
+    .job-att:hover { background:var(--blue); color:#fff; }
+    .card-warn { font-size:11.5px; color:#9a6b00; background:#fff7e0; border:1px solid #ffe2a8; border-radius:6px; padding:5px 8px; margin-top:7px; }
+    .badge-conf { display:inline-block; font-size:11px; padding:1px 7px; border-radius:10px; font-weight:600; white-space:nowrap; }
+    .conf-ok { color:#0a7d3e; background:#e4f7ec; border:1px solid #b6e6cb; }
+    .conf-off { color:#2E7D5B; background:#EAF6F0; border:1px solid #C6E5D5; }
+    .conf-warn { color:#9a6b00; background:#fff7e0; border:1px solid #ffe2a8; }
+    .modal-links { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+    .modal-link { font-size:13px; color:var(--blue); text-decoration:none; border:1px solid var(--blue); border-radius:6px; padding:5px 10px; }
+    .modal-link:hover { background:var(--blue); color:#fff; }
+    .group-highlight { animation: groupPulse 1.2s ease; }
+    @keyframes groupPulse {
+      0% { background: rgba(31,138,76,0.08); }
+      100% { background: transparent; }
+    }
+    @media (max-width: 640px) {
+      .header h1 { font-size:20px; }
+      .header p { font-size:12.5px; }
+      .stage-nav { gap:6px; flex-wrap:wrap; }
+      .stage-tab { padding:7px 10px; font-size:13px; }
+      .container { padding:10px; }
+      .card { padding:14px; }
+      .form-group label { font-size:13px; }
+      .options { gap:6px 10px; }
+      .options label { font-size:13px; }
+      .disclaimer #dataUpdated { display:block; margin-top:3px; }
+      .job-title { font-size:14px; }
+      .summary { font-size:13px; }
+      .summary-item .n { font-size:22px; }
+      .summary-item .t { font-size:11px; }
+      .fab-timeline { padding: 10px 14px; font-size:13px; right: 10px; bottom: 16px; }
+
+    /* 2027届提前批最新官方公告面板 */
+    .trends-card{margin:14px auto 0;max-width:1100px;background:#fff;border:1px solid #E0EEE7;border-radius:14px;padding:16px 18px;box-shadow:0 2px 10px rgba(31,138,76,.06);}
+    .trends-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
+    .trends-title{font-size:16px;font-weight:700;color:#0F5A32;}
+    .trends-sub{font-size:12px;color:#8A94A6;}
+    .trend-item{font-size:13px;line-height:1.55;padding:10px 12px;border-radius:8px;margin-bottom:10px;background:#EAF6F0;border-left:3px solid #1F8A4C;}
+    .trend-item b{color:#0F5A32;}
+    .trend-meta{color:#8A94A6;font-size:12px;margin-top:3px;}
+    .trend-link{display:inline-block;margin-top:7px;font-size:12px;color:#fff;background:#0F5A32;padding:3px 11px;border-radius:6px;text-decoration:none;}
+    .trend-link:hover{background:#0D5C33;}
+    .trend-empty{color:#8A94A6;font-size:13px;padding:8px 0;}
+    .trends-foot{font-size:12px;color:#8A94A6;margin-top:6px;padding-top:10px;border-top:1px dashed #E0EEE7;}
+  </style>
+
+  <!-- 百度统计 -->
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?23483745";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+</head>
+<body>
+  <div class="header">
+    <h1>江苏教师招聘 · 智能匹配</h1>
+    <p class="slogan">3 分钟填好档案，立刻看清你能拿下哪些教师编制岗</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num" id="statJobs">136</div><div class="lab">在库岗位</div></div>
+      <div class="hero-stat"><div class="num">13</div><div class="lab">覆盖地市</div></div>
+      <div class="hero-stat"><div class="num">4</div><div class="lab">学段维度</div></div>
+    </div>
+    <div class="stage-nav">
+      <div class="stage-tab" data-stage="幼儿园" role="button" tabindex="0"><span class="icon">🧒</span>幼儿园</div>
+      <div class="stage-tab active" data-stage="小学" role="button" tabindex="0"><span class="icon">✏️</span>小学</div>
+      <div class="stage-tab" data-stage="初中" role="button" tabindex="0"><span class="icon">📚</span>初中</div>
+      <div class="stage-tab" data-stage="高中" role="button" tabindex="0"><span class="icon">🎓</span>高中</div>
+    </div>
+  </div>
+
+  <div class="disclaimer">⚠️ 本工具仅<b>辅助筛选报考资格</b>，所有报考条件以教育局官方公告为准。岗位库更新于 <span id="dataUpdated">—</span></div>
+
+  <div class="trends-card">
+    <div class="trends-head">
+      <span class="trends-title">📢 2027届教师提前批 · 最新官方公告</span>
+      <span class="trends-sub">数据更新于 <span id="trendsDate">—</span></span>
+    </div>
+    <div id="trendsConfirmed"></div>
+    <div class="trends-foot">以上为确证发布的官方公告，已纳入下方资格匹配；更多地区公告发布后将持续补充。</div>
+  </div>
+
+  <div class="container">
+    <div class="card">
+      <div class="section-title">填写我的档案</div>
+
+      <div class="form-group">
+        <label>届别</label>
+        <div class="options" id="graduateYear">
+          <label><input type="radio" name="graduateYear" value="2026"> 2026届</label>
+          <label><input type="radio" name="graduateYear" value="2027"> 2027届</label>
+          <label><input type="radio" name="graduateYear" value="other"> 往届/其他</label>
+        </div>
+        <div class="hint">2026届及往届毕业生可以报"社招"类岗位；提前批一般只面向应届生。</div>
+      </div>
+
+      <div class="form-group">
+        <label>户籍所在地</label>
+        <div class="options" id="region" style="margin-bottom:10px;">
+          <label><input type="radio" name="region" value="jiangsu"> 江苏省内</label>
+          <label><input type="radio" name="region" value="other"> 省外</label>
+        </div>
+        <div id="jiangsuHukouBox" style="display:flex;gap:10px;">
+          <select id="hukouCity" style="flex:1;margin-bottom:0;"><option value="">请选择市</option></select>
+          <select id="hukouDistrict" style="flex:1;margin-bottom:0;"><option value="">请先选择市</option></select>
+        </div>
+        <div id="otherProvinceBox" style="display:none;">
+          <select id="otherProvince"><option value="">请选择省份</option></select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>专业是否为师范类</label>
+        <div class="options" id="normalMajor">
+          <label><input type="radio" name="normalMajor" value="师范类"> 师范类</label>
+          <label><input type="radio" name="normalMajor" value="非师范类"> 非师范类</label>
+          <label><input type="radio" name="normalMajor" value=""> 不限/不确定</label>
+        </div>
+        <div class="hint">个别地区（多见于提前批）要求必须是师范类专业才能报考；师范生选「师范类」匹配更准，非师范生会被直接判部分岗位不符。</div>
+      </div>
+
+      <div class="form-group">
+        <label>学历</label>
+        <div class="options" id="degree">
+          <label><input type="radio" name="degree" value="本科"> 本科</label>
+          <label><input type="radio" name="degree" value="硕士"> 硕士</label>
+        </div>
+        <div class="hint">江苏教师编制岗基本都要求本科起步，硕士可报岗位更多、不少地区还放宽户籍。</div>
+      </div>
+
+      <div class="form-group" id="masterTypeBox" style="display:none;">
+        <label>硕士类型（选填）</label>
+        <div class="options" id="masterType">
+          <label><input type="radio" name="masterType" value="学硕"> 学术型硕士（学硕）</label>
+          <label><input type="radio" name="masterType" value="专硕"> 专业型硕士（专硕）</label>
+          <label><input type="radio" name="masterType" value=""> 不确定/不限</label>
+        </div>
+        <div class="hint">江苏绝大多数岗不区分学硕/专硕，只认「硕士+专业对口」。仅少数岗位（如要求「学科教学/小学教育专硕」）偏好专硕，这类会在结果标「待确认」。</div>
+      </div>
+
+      <div class="form-group">
+        <label id="schoolTypeLabel">院校类型（提前批资格判断核心）</label>
+        <div class="options" id="schoolType">
+          <label><input type="radio" name="schoolType" value="普通本科"> 普通本科/双非</label>
+          <label><input type="radio" name="schoolType" value="双非一本"> 双非一本</label>
+          <label><input type="radio" name="schoolType" value="211"> 211（非985）</label>
+          <label><input type="radio" name="schoolType" value="985"> 985</label>
+          <label><input type="radio" name="schoolType" value="双一流"> 双一流（非985/211）</label>
+          <label><input type="radio" name="schoolType" value="省属重点师范"> 省属重点师范院校</label>
+          <label><input type="radio" name="schoolType" value="部属师范"> 部属师范大学（6所）</label>
+          <label><input type="radio" name="schoolType" value="南师大或江苏师大"> 南师大/江苏师大</label>
+          <label><input type="radio" name="schoolType" value="10所重点师范"> 10所重点师范大学之一</label>
+          <label><input type="radio" name="schoolType" value="境外高校"> 境外高校</label>
+        </div>
+        <div class="hint">提前批常见口径：985＞211＞双一流＞双非一本＞普通双非。部属6所师范=北师大/华东师大/东北师大/华中师大/陕西师大/西南大学；"10所重点师范"≈部属6所+南师大/江苏师大/湖南师大等。</div>
+      </div>
+
+      <div class="form-group" id="bachelorSchoolBox" style="display:none;">
+        <label>本科院校层次（硕士选填，人才引进常卡本科院校）</label>
+        <div class="options" id="bachelorSchoolType">
+          <label><input type="radio" name="bachelorSchoolType" value=""> 不填/同硕士院校</label>
+          <label><input type="radio" name="bachelorSchoolType" value="普通本科"> 普通本科/双非</label>
+          <label><input type="radio" name="bachelorSchoolType" value="双非一本"> 双非一本</label>
+          <label><input type="radio" name="bachelorSchoolType" value="211"> 211（非985）</label>
+          <label><input type="radio" name="bachelorSchoolType" value="985"> 985</label>
+          <label><input type="radio" name="bachelorSchoolType" value="双一流"> 双一流（非985/211）</label>
+          <label><input type="radio" name="bachelorSchoolType" value="省属重点师范"> 省属重点师范院校</label>
+          <label><input type="radio" name="bachelorSchoolType" value="部属师范"> 部属师范大学（6所）</label>
+          <label><input type="radio" name="bachelorSchoolType" value="南师大或江苏师大"> 南师大/江苏师大</label>
+          <label><input type="radio" name="bachelorSchoolType" value="10所重点师范"> 10所重点师范大学之一</label>
+          <label><input type="radio" name="bachelorSchoolType" value="境外高校"> 境外高校</label>
+        </div>
+        <div class="hint">人才引进/提前批常写"硕士不限院校，但本科须为双一流/985/211"。填了本科院校层次后，匹配会单独用它判断本科院校类条款。</div>
+      </div>
+
+      <div class="form-group" id="bachelorMajorBox" style="display:none;">
+        <label>本科专业（选填，本硕不一致时用）</label>
+        <input type="text" id="bachelorMajor" placeholder="如：数学与应用数学 / 汉语言文学（师范）……" style="width:100%; padding:9px 12px; border:1px solid #D0D7DE; border-radius:8px; font-size:14px;">
+        <div class="hint">部分地区招聘会同时看本科+硕士专业（本硕一致更稳，本硕不一致时按本科专业匹配学科）。填了本科专业后，匹配会把它也计入学科判断。</div>
+      </div>
+
+      <div class="form-group">
+        <label id="majorLabel">专业（决定你能报哪个学科方向）</label>
+        <div class="options" id="major">
+          <label data-stages="小学,初中,高中"><input type="radio" name="major" value="语文"> 语文</label>
+          <label data-stages="小学,初中,高中"><input type="radio" name="major" value="数学"> 数学</label>
+          <label data-stages="小学,初中,高中"><input type="radio" name="major" value="英语"> 英语</label>
+          <label data-stages="小学,初中"><input type="radio" name="major" value="科学"> 科学</label>
+          <label data-stages="小学"><input type="radio" name="major" value="特殊教育"> 特殊教育</label>
+          <label data-stages="初中,高中"><input type="radio" name="major" value="道德与法治"> 道德与法治</label>
+          <label data-stages="初中"><input type="radio" name="major" value="历史与社会"> 历史与社会</label>
+          <label data-stages="高中"><input type="radio" name="major" value="思想政治"> 思想政治</label>
+          <label data-stages="高中"><input type="radio" name="major" value="物理"> 物理</label>
+          <label data-stages="高中"><input type="radio" name="major" value="化学"> 化学</label>
+          <label data-stages="高中"><input type="radio" name="major" value="生物"> 生物</label>
+          <label data-stages="高中"><input type="radio" name="major" value="历史"> 历史</label>
+          <label data-stages="高中"><input type="radio" name="major" value="地理"> 地理</label>
+          <label data-stages="高中"><input type="radio" name="major" value="通用技术"> 通用技术</label>
+          <label data-stages="小学,初中,高中"><input type="radio" name="major" value="体育"> 体育</label>
+          <label data-stages="小学,初中,高中"><input type="radio" name="major" value="音乐"> 音乐</label>
+          <label data-stages="小学,初中,高中"><input type="radio" name="major" value="美术"> 美术</label>
+          <label data-stages="小学,初中,高中"><input type="radio" name="major" value="信息技术"> 信息技术</label>
+          <label data-stages="小学,初中,高中"><input type="radio" name="major" value="心理健康"> 心理健康</label>
+          <label data-stages="小学"><input type="radio" name="major" value="小学教育"> 小学教育（师范类）</label>
+          <label data-stages="幼儿园"><input type="radio" name="major" value="学前教育"> 学前教育</label>
+          <label data-stages="幼儿园,小学,初中,高中"><input type="radio" name="major" value="custom"> 其他</label>
+        </div>
+        <input type="text" id="majorCustom" placeholder="如：小学教育（数学方向）填这里，会自动识别学科" style="display:none; width:100%; padding:9px 12px; border:1px solid #D0D7DE; border-radius:8px; font-size:14px; margin-top:8px;">
+        <div id="majorXiaoxueBox" style="display:none; margin-top:10px;">
+          <div class="cert-group-title">小学教育 · 选择你的学科方向</div>
+          <div class="options" id="majorXiaoxue">
+            <label data-stages="小学"><input type="radio" name="major" value="小学教育（数学方向）"> 数学方向</label>
+            <label data-stages="小学"><input type="radio" name="major" value="小学教育（语文方向）"> 语文方向</label>
+            <label data-stages="小学"><input type="radio" name="major" value="小学教育（其他方向）"> 其他方向（按教资学科报考）</label>
+          </div>
+          <div class="hint">⚠️ 部分地区（尤其中学数学岗）专业目录<b>不含小学教育</b>，即使有初中数学教资也需电话确认——这类岗位系统会标「待确认」提醒你。<br>选「其他方向」时按你的教资学科判断可报学科。</div>
+        </div>
+        <div class="hint">小学教育选「数学方向/语文方向/其他方向」，系统自动识别对应学科；特殊教育没有独立学段，统一放在「小学」里。</div>
+      </div>
+
+      <div class="form-group">
+        <label>政治面貌（选填，个别岗位要求党员）</label>
+        <div class="options" id="politicalStatus">
+          <label><input type="radio" name="politicalStatus" value="中共党员"> 中共党员</label>
+          <label><input type="radio" name="politicalStatus" value="预备党员"> 预备党员</label>
+          <label><input type="radio" name="politicalStatus" value="共青团员"> 共青团员</label>
+          <label><input type="radio" name="politicalStatus" value=""> 群众/未填</label>
+        </div>
+        <div class="hint">多数教师岗不限政治面貌，仅部分高中/辅导员/特殊岗位要求党员或团员。</div>
+      </div>
+
+      <div class="form-group">
+        <label>特殊身份（选填，提前批资格常按这些身份放宽）</label>
+        <div class="options" id="specialStatus">
+          <label><input type="checkbox" value="公费师范生"> 公费师范生</label>
+          <label><input type="checkbox" value="国优计划"> 国优计划（国家优秀中小学教师培养计划）</label>
+          <label><input type="checkbox" value="一本或特控线"> 高考一本线/特控线录取</label>
+        </div>
+        <div class="hint">勾选后匹配"公费师范生/国优计划/一本或特控线录取"等提前批资格条款更准。</div>
+      </div>
+
+      <div class="form-group">
+        <label>普通话等级（语文岗普遍要求二甲，其他学科一般二乙）</label>
+        <div class="options" id="putonghua">
+          <label><input type="radio" name="putonghua" value="二甲及以上"> 二甲及以上</label>
+          <label><input type="radio" name="putonghua" value="二乙"> 二级乙等</label>
+          <label><input type="radio" name="putonghua" value=""> 其他/未考取</label>
+        </div>
+        <div class="hint">普通话是教师资格认定必备项：语文（含小学语文）要求二甲，其余学科二乙即可。</div>
+      </div>
+
+      <div class="form-group">
+        <label>教师资格证（可多选，高学段教资可报低学段岗位）</label>
+        <div class="hint" id="certStageHint" style="margin-bottom:6px;"></div>
+
+        <div class="cert-stage-box" data-stage="幼儿园" style="display:none;">
+          <div class="cert-group-title">幼儿园教师资格</div>
+          <div class="options" id="certsKg">
+            <label><input type="checkbox" value="幼儿园教师资格"> 幼儿园教师资格</label>
+          </div>
+        </div>
+
+        <div class="cert-stage-box" data-stage="小学">
+          <div class="cert-group-title">小学教师资格</div>
+          <div class="options" id="certsPrimary">
+            <label><input type="checkbox" value="小学语文"> 语文</label>
+            <label><input type="checkbox" value="小学数学"> 数学</label>
+            <label><input type="checkbox" value="小学英语"> 英语</label>
+            <label><input type="checkbox" value="小学科学"> 科学</label>
+            <label><input type="checkbox" value="小学道德与法治"> 道德与法治</label>
+            <label><input type="checkbox" value="小学音乐"> 音乐</label>
+            <label><input type="checkbox" value="小学体育"> 体育</label>
+            <label><input type="checkbox" value="小学美术"> 美术</label>
+            <label><input type="checkbox" value="小学信息技术"> 信息技术</label>
+            <label><input type="checkbox" value="小学心理健康"> 心理健康</label>
+            <label><input type="checkbox" value="小学全科"> 全科</label>
+            <label><input type="checkbox" value="小学特殊教育"> 特殊教育</label>
+          </div>
+        </div>
+
+        <div class="cert-stage-box" data-stage="初中" style="display:none;">
+          <div class="cert-group-title">初中教师资格</div>
+          <div class="options" id="certsJunior">
+            <label><input type="checkbox" value="初中语文"> 语文</label>
+            <label><input type="checkbox" value="初中数学"> 数学</label>
+            <label><input type="checkbox" value="初中英语"> 英语</label>
+            <label><input type="checkbox" value="初中物理"> 物理</label>
+            <label><input type="checkbox" value="初中化学"> 化学</label>
+            <label><input type="checkbox" value="初中生物"> 生物</label>
+            <label><input type="checkbox" value="初中科学"> 科学</label>
+            <label><input type="checkbox" value="初中道德与法治"> 道德与法治</label>
+            <label><input type="checkbox" value="初中历史与社会"> 历史与社会</label>
+            <label><input type="checkbox" value="初中历史"> 历史</label>
+            <label><input type="checkbox" value="初中地理"> 地理</label>
+            <label><input type="checkbox" value="初中音乐"> 音乐</label>
+            <label><input type="checkbox" value="初中体育"> 体育</label>
+            <label><input type="checkbox" value="初中美术"> 美术</label>
+            <label><input type="checkbox" value="初中信息技术"> 信息技术</label>
+            <label><input type="checkbox" value="初中心理健康"> 心理健康</label>
+            <label><input type="checkbox" value="初中全科"> 全科</label>
+          </div>
+        </div>
+
+        <div class="cert-stage-box" data-stage="高中" style="display:none;">
+          <div class="cert-group-title">高中教师资格</div>
+          <div class="options" id="certsSenior">
+            <label><input type="checkbox" value="高中语文"> 语文</label>
+            <label><input type="checkbox" value="高中数学"> 数学</label>
+            <label><input type="checkbox" value="高中英语"> 英语</label>
+            <label><input type="checkbox" value="高中物理"> 物理</label>
+            <label><input type="checkbox" value="高中化学"> 化学</label>
+            <label><input type="checkbox" value="高中生物"> 生物</label>
+            <label><input type="checkbox" value="高中思想政治"> 思想政治</label>
+            <label><input type="checkbox" value="高中历史"> 历史</label>
+            <label><input type="checkbox" value="高中地理"> 地理</label>
+            <label><input type="checkbox" value="高中音乐"> 音乐</label>
+            <label><input type="checkbox" value="高中体育"> 体育</label>
+            <label><input type="checkbox" value="高中美术"> 美术</label>
+            <label><input type="checkbox" value="高中信息技术"> 信息技术</label>
+            <label><input type="checkbox" value="高中通用技术"> 通用技术</label>
+            <label><input type="checkbox" value="高中心理健康"> 心理健康</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>荣誉奖项</label>
+        <div class="cert-group-title">荣誉称号</div>
+        <div class="options" id="honors">
+          <label><input type="checkbox" value="省级优秀毕业生"> 省级优秀毕业生</label>
+          <label><input type="checkbox" value="校级优秀毕业生"> 校级优秀毕业生</label>
+          <label><input type="checkbox" value="省级三好学生"> 省级三好学生</label>
+          <label><input type="checkbox" value="校级三好学生"> 校级三好学生</label>
+          <label><input type="checkbox" value="优秀学生干部"> 优秀学生干部</label>
+          <label><input type="checkbox" value="优秀团干部"> 优秀团干部</label>
+          <label><input type="checkbox" value="优秀学生"> 优秀学生</label>
+          <label><input type="checkbox" value="优秀团员"> 优秀团员</label>
+        </div>
+        <div class="cert-group-title">奖学金（按等级勾选）</div>
+        <div class="options" id="honorsScholarship">
+          <label><input type="checkbox" value="国家奖学金"> 国家奖学金</label>
+          <label><input type="checkbox" value="国家励志奖学金"> 国家励志奖学金</label>
+          <label><input type="checkbox" value="省政府奖学金"> 省政府奖学金</label>
+          <label><input type="checkbox" value="校级一等奖学金"> 校级一等</label>
+          <label><input type="checkbox" value="校级二等奖学金"> 校级二等</label>
+          <label><input type="checkbox" value="校级三等奖学金"> 校级三等</label>
+          <label><input type="checkbox" value="校级单项奖学金"> 校级单项</label>
+        </div>
+        <div class="cert-group-title">奖学金获得次数（部分公告要求"两次校级二等及以上"）</div>
+        <select id="scholarshipTimes">
+          <option value="">不填/1次</option>
+          <option value="2">2次</option>
+          <option value="3">3次及以上</option>
+        </select>
+        <div class="hint">仅当你在上方勾选了奖学金且确实多次获得时选择；苏州等提前批有"两次校级一等奖学金及以上"条款。</div>
+        <div class="cert-group-title">省级师范生教学基本功大赛</div>
+        <div class="options" id="honorsContest">
+          <label><input type="checkbox" value="省级师范生教学基本功大赛一等奖"> 一等奖</label>
+          <label><input type="checkbox" value="省级师范生教学基本功大赛二等奖"> 二等奖</label>
+          <label><input type="checkbox" value="省级师范生教学基本功大赛三等奖"> 三等奖</label>
+        </div>
+        <div class="cert-group-title">学科/教学竞赛（提前批常见条款）</div>
+        <div class="options" id="honorsAcademic">
+          <label><input type="checkbox" value="全国师范生教学技能竞赛获奖"> 全国师范生教学技能竞赛获奖</label>
+          <label><input type="checkbox" value="省级学科竞赛一等奖"> 省级学科竞赛一等奖</label>
+          <label><input type="checkbox" value="省级学科竞赛二等奖"> 省级学科竞赛二等奖</label>
+          <label><input type="checkbox" value="省级学科竞赛三等奖"> 省级学科竞赛三等奖</label>
+          <label><input type="checkbox" value="高中学科奥赛省级获奖"> 高中学科奥赛省级获奖</label>
+          <label><input type="checkbox" value="全国大学生竞赛获奖"> 全国大学生竞赛获奖</label>
+        </div>
+        <div class="cert-group-title">综合测评 / 专业排名</div>
+        <select id="zongce">
+          <option value="">请选择（部分岗位可用排名代替荣誉）</option>
+          <option value="5">前5%以内</option>
+          <option value="10">前10%以内</option>
+          <option value="20">前20%以内</option>
+          <option value="30">前30%以内</option>
+          <option value="50">前50%以内</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>其他条件（选填，可合并填写）</label>
+        <div class="custom-honor-row" style="margin-bottom:8px;">
+          <input type="text" id="customHonorInput" placeholder="其他荣誉/奖项，如：省师范生教学基本功大赛二等奖" maxlength="30">
+          <button data-action="add-custom-honor" role="button" tabindex="0">添加</button>
+        </div>
+        <div id="customHonors" class="options" style="margin-top:8px;"></div>
+        <textarea id="otherConditions" rows="2" placeholder="其他报考条件，如：服务期5年、限本地生源、须有某证书等，写在这里"></textarea>
+        <div class="hint">添加的荣誉标签点 × 可删除；系统无法自动核对其他条件，填写后每条岗位都会提醒你对照公告原文检查。</div>
+      </div>
+
+      <button class="btn-save" id="saveBtn">生成我的匹配结果</button>
+      <div class="msg" id="msg"></div>
+    </div>
+
+    <div class="filter-bar">
+      <span>只看编制/备案制岗位</span>
+      <label class="switch">
+        <input type="checkbox" id="bianzhiOnly" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="filter-bar" style="gap:12px;">
+      <select id="cityFilter" style="width:auto;flex:1;margin-bottom:0;padding:8px 10px;font-size:14px;"></select>
+      <select id="batchFilter" style="width:auto;flex:1;margin-bottom:0;padding:8px 10px;font-size:14px;">
+        <option value="">全部批次</option>
+        <option value="early">提前批/校招</option>
+        <option value="social">社招统考</option>
+      </select>
+    </div>
+    <div class="filter-bar" style="gap:12px;">
+      <select id="masterFilter" style="width:auto;flex:1;margin-bottom:0;padding:8px 10px;font-size:14px;">
+        <option value="">学历要求不限</option>
+        <option value="need">要求硕士及以上</option>
+        <option value="none">不要求硕士（本科可报）</option>
+      </select>
+      <select id="honorFilter" style="width:auto;flex:1;margin-bottom:0;padding:8px 10px;font-size:14px;">
+        <option value="">荣誉门槛不限</option>
+        <option value="yes">有荣誉/奖学金门槛</option>
+        <option value="no">无荣誉门槛</option>
+      </select>
+    </div>
+
+    <div class="card round" style="padding:16px;">
+      <div class="section-title" id="resultTitle">匹配结果</div>
+      <div id="resultArea"></div>
+    </div>
+  </div>
+
+  <!-- 详情弹窗 -->
+  <div class="modal-overlay" id="detailModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title" id="modalTitle">岗位详情</div>
+        <button class="modal-close" data-action="close-detail" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-row"><div class="modal-label">地区 / 批次</div><div id="modalLocation"></div></div>
+      <div class="modal-row"><div class="modal-label">公告标题</div><div id="modalTitle2"></div></div>
+      <div class="modal-row"><div class="modal-label">招聘岗位</div><div id="modalPosts"></div></div>
+      <div class="modal-row"><div class="modal-label">招聘人数</div><div id="modalCount"></div></div>
+      <div class="modal-row"><div class="modal-label">编制类型</div><div id="modalStaffing"></div></div>
+      <div class="modal-row"><div class="modal-label">报名时间</div><div id="modalEnroll"></div></div>
+      <div class="modal-row"><div class="modal-label">考试时间</div><div id="modalExam"></div></div>
+      <div class="modal-row"><div class="modal-label">报考条件</div><div id="modalCondition"></div></div>
+      <div class="modal-row"><div class="modal-label">匹配状态</div><div id="modalStatus"></div></div>
+      <div class="modal-row"><div class="modal-label">数据来源</div><div id="modalConf"></div></div>
+      <div class="modal-row" id="modalNoteRow" style="display:none"><div class="modal-label">附件核验</div><div id="modalNote"></div></div>
+      <div class="modal-links">
+        <a class="modal-link" id="modalUrl" href="#" target="_blank">📄 查看原公告</a>
+        <a class="modal-link" id="modalAtt" href="#" target="_blank" style="display:none">📎 原公告附件（岗位表）</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 收藏/报考时间线弹窗 -->
+  <div class="modal-overlay" id="timelineModal">
+    <div class="modal timeline-modal">
+      <div class="timeline-head">
+        <div class="timeline-title">我的收藏 · 报考时间线</div>
+        <button class="modal-close" data-action="close-timeline" aria-label="关闭">×</button>
+      </div>
+      <div class="timeline-legend">
+        <span><i style="background:var(--ok)"></i>可报</span>
+        <span><i style="background:var(--maybe)"></i>待确认</span>
+        <span><i style="background:#C9CFD6"></i>不符</span>
+        <span style="margin-left:auto;">按公告报名截止日期排序</span>
+      </div>
+      <div class="timeline-actions">
+        <button data-action="clear-favorites">清空收藏</button>
+      </div>
+      <div class="timeline-chart-wrap" id="timelineChartWrap">
+        <div class="empty-tip" style="padding:24px 0;">暂无收藏岗位<br>在匹配结果卡片右下角点 ☆ 收藏</div>
+      </div>
+      <div class="fav-list" id="favList"></div>
+    </div>
+  </div>
+
+  <!-- 浮动时间线入口 -->
+  <button class="fab-timeline" data-action="open-timeline">
+    <span>📅</span>
+    <span>报考时间线</span>
+    <span class="badge" id="favCount">0</span>
+  </button>
+
+  <div class="site-foot">
+    <div>© 2026 江苏教师招聘智能匹配 · 数据整理自各地教育局公开招聘公告 · 仅供个人参考，结果转请至原公告</div>
+    <div class="site-foot-stat">
+      累计访问 <span id="busuanzi_value_site_pv">0</span> · 访客 <span id="busuanzi_value_site_uv">0</span>
+    </div>
+  </div>
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  <script src="data.js"></script>
+  <script src="match.js"></script>
+  <script>
+    // ========== 江苏 13 市 → 全部区县 ==========
+    const cityDistricts = {
+      "南京": ["玄武区","秦淮区","建邺区","鼓楼区","栖霞区","雨花台区","江宁区","浦口区","六合区","溧水区","高淳区"],
+      "无锡": ["梁溪区","锡山区","惠山区","滨湖区","新吴区","江阴市","宜兴市"],
+      "徐州": ["鼓楼区","云龙区","贾汪区","泉山区","铜山区","丰县","沛县","睢宁县","新沂市","邳州市"],
+      "常州": ["天宁区","钟楼区","新北区","武进区","金坛区","溧阳市"],
+      "苏州": ["姑苏区","虎丘区","吴中区","相城区","吴江区","常熟市","张家港市","昆山市","太仓市","工业园区","高新区"],
+      "南通": ["崇川区","港闸区","通州区","如东县","启东市","如皋市","海门区","海安市"],
+      "连云港": ["连云区","海州区","赣榆区","东海县","灌云县","灌南县"],
+      "淮安": ["淮安区","淮阴区","清江浦区","洪泽区","涟水县","盱眙县","金湖县"],
+      "盐城": ["亭湖区","盐都区","大丰区","响水县","滨海县","阜宁县","射阳县","建湖县","东台市"],
+      "扬州": ["广陵区","邗江区","江都区","宝应县","仪征市","高邮市"],
+      "镇江": ["京口区","润州区","丹徒区","丹阳市","扬中市","句容市"],
+      "泰州": ["海陵区","高港区","姜堰区","兴化市","靖江市","泰兴市"],
+      "宿迁": ["宿城区","宿豫区","沭阳县","泗阳县","泗洪县"]
+    };
+    const otherProvinces = ["浙江","安徽","上海","江西","福建","河南","湖北","湖南","山东","四川","重庆","广东","北京","天津","河北","山西","辽宁","吉林","黑龙江","陕西","甘肃","青海","云南","贵州","广西","海南","内蒙古","新疆","西藏","宁夏","其他"];
+
+    const citySel = document.getElementById("hukouCity");
+    const districtSel = document.getElementById("hukouDistrict");
+    const provinceSel = document.getElementById("otherProvince");
+
+    // 初始化下拉框
+    Object.keys(cityDistricts).forEach(c => {
+      const opt = document.createElement("option"); opt.value = c; opt.textContent = c; citySel.appendChild(opt);
+    });
+    otherProvinces.forEach(p => {
+      const opt = document.createElement("option"); opt.value = p; opt.textContent = p; provinceSel.appendChild(opt);
+    });
+
+    citySel.addEventListener("change", function() {
+      districtSel.innerHTML = '<option value="">请选择区县</option>';
+      (cityDistricts[citySel.value] || []).forEach(d => {
+        const opt = document.createElement("option"); opt.value = d; opt.textContent = d; districtSel.appendChild(opt);
+      });
+      runMatch();
+    });
+    districtSel.addEventListener("change", runMatch);
+    provinceSel.addEventListener("change", runMatch);
+
+    // 省内/省外切换
+    document.querySelectorAll('input[name="region"]').forEach(r => {
+      r.addEventListener("change", function() {
+        const isJs = this.value === "jiangsu";
+        document.getElementById("jiangsuHukouBox").style.display = isJs ? "flex" : "none";
+        document.getElementById("otherProvinceBox").style.display = isJs ? "none" : "block";
+        updateHighlight("region");
+        runMatch();
+      });
+    });
+
+    // ========== 学段导航（教资选项跟着学段走） ==========
+    let currentStage = "小学";
+    function filterMajor(stage) {
+      const labels = Array.from(document.querySelectorAll('#major > label'));
+      let firstVisible = null;
+      let currentCheckedVisible = false;
+      labels.forEach(lbl => {
+        const stages = (lbl.dataset.stages || '').split(',');
+        const show = stages.includes(stage);
+        lbl.style.display = show ? 'inline-flex' : 'none';
+        if (show) {
+          if (!firstVisible) firstVisible = lbl;
+          const input = lbl.querySelector('input');
+          if (input && input.checked) currentCheckedVisible = true;
+        }
+      });
+      // 小学教育方向区只在"小学"学段显示
+      document.getElementById("majorXiaoxueBox").style.display =
+        (stage === "小学") ? document.getElementById("majorXiaoxueBox").style.display : "none";
+      let target = null;
+      if (stage === '幼儿园') {
+        target = labels.find(l => l.querySelector('input[value="学前教育"]'));
+      } else if (!currentCheckedVisible && firstVisible) {
+        target = firstVisible;
+      }
+      if (target) {
+        const input = target.querySelector('input');
+        input.checked = true;
+        updateHighlight('major');
+        document.getElementById('majorCustom').style.display =
+          (input.value === 'custom') ? 'block' : 'none';
+      }
+    }
+    function switchStage(stage) {
+      currentStage = stage;
+      document.querySelectorAll(".stage-tab").forEach(t => {
+        t.classList.toggle("active", t.dataset.stage === stage);
+      });
+      filterMajor(stage);
+      // 只显示当前学段的教资选项，其他学段已勾选的保留（隐藏但不清空）
+      document.querySelectorAll(".cert-stage-box").forEach(box => {
+        box.style.display = box.dataset.stage === stage ? "block" : "none";
+      });
+      document.getElementById("certStageHint").textContent =
+        `当前填写「${stage}」学段教资；已勾选的其他学段教资会保留，点顶部图标可切换学段填写`;
+      updateCityFilter();
+      runMatch();
+    }
+
+    // ========== 结果筛选（城市 + 只看可报） ==========
+    function updateCityFilter() {
+      const sel = document.getElementById("cityFilter");
+      if (!sel || typeof JOBS === "undefined") return;
+      const keep = sel.value;
+      const cities = [...new Set(JOBS.filter(j => {
+        const st = (j.rules && j.rules.stage) || j.stage || "小学";
+        return st.includes(currentStage) || (st.includes("中学") && (currentStage === "初中" || currentStage === "高中"));
+      }).map(j => j.city))].sort((a, b) => a.localeCompare(b, "zh"));
+      sel.innerHTML = '<option value="">全部城市</option>' + cities.map(c => `<option value="${c}">${c}</option>`).join("");
+      sel.value = cities.includes(keep) ? keep : "";
+    }
+    document.getElementById("cityFilter").addEventListener("change", runMatch);
+    document.getElementById("batchFilter").addEventListener("change", runMatch);
+    document.getElementById("masterFilter").addEventListener("change", runMatch);
+    document.getElementById("honorFilter").addEventListener("change", runMatch);
+
+    // ========== 专业（选"其他"显示自定义输入框；选"小学教育"显示方向选择） ==========
+    document.querySelectorAll('input[name="major"]').forEach(r => {
+      r.addEventListener("change", function() {
+        const isCustom = (this.value === "custom" && this.checked);
+        const isXiaoxue = (this.value === "小学教育" && this.checked);
+        document.getElementById("majorCustom").style.display = isCustom ? "block" : "none";
+        document.getElementById("majorXiaoxueBox").style.display = isXiaoxue ? "block" : "none";
+        // 取消小学教育时清掉已选的方向（避免残留）
+        if (this.value === "小学教育" && !this.checked) {
+          document.querySelectorAll('#majorXiaoxue input[name="major"]').forEach(x => x.checked = false);
+        }
+        updateHighlight("major");
+        runMatch();
+      });
+    });
+    document.getElementById("majorCustom").addEventListener("input", runMatch);
+    document.getElementById("bachelorMajor").addEventListener("input", runMatch);
+    document.getElementById("otherConditions").addEventListener("input", runMatch);
+
+    // ========== 学历切换：硕士显示本科专业/本科院校层次输入框 + 专业标签改"硕士专业" ==========
+    document.querySelectorAll('input[name="degree"]').forEach(r => {
+      r.addEventListener("change", function() {
+        const isMaster = (this.value === "硕士" && this.checked);
+        document.getElementById("bachelorMajorBox").style.display = isMaster ? "block" : "none";
+        document.getElementById("bachelorSchoolBox").style.display = isMaster ? "block" : "none";
+        document.getElementById("masterTypeBox").style.display = isMaster ? "block" : "none";
+        const lbl = document.getElementById("majorLabel");
+        if (lbl) lbl.textContent = isMaster ? "硕士专业（决定你能报哪个学科方向）" : "专业（决定你能报哪个学科方向）";
+        const sl = document.getElementById("schoolTypeLabel");
+        if (sl) sl.textContent = isMaster ? "硕士院校层次" : "院校类型（提前批资格判断核心）";
+        runMatch();
+      });
+    });
+
+    // ========== 选项高亮 ==========
+    function updateHighlight(groupId) {
+      const group = document.getElementById(groupId);
+      if (!group) return;
+      group.querySelectorAll("label").forEach(label => {
+        const input = label.querySelector("input");
+        if (input && input.checked) label.classList.add("active");
+        else label.classList.remove("active");
+      });
+    }
+    ["graduateYear","degree","schoolType","bachelorSchoolType","specialStatus","politicalStatus","normalMajor","major","majorXiaoxue","region","certsKg","certsPrimary","certsJunior","certsSenior","honors","honorsScholarship","honorsContest","honorsAcademic","putonghua"].forEach(id => {
+      const g = document.getElementById(id);
+      if (g) g.addEventListener("change", () => { updateHighlight(id); runMatch(); });
+    });
+    document.getElementById("zongce").addEventListener("change", runMatch);
+    document.getElementById("scholarshipTimes").addEventListener("change", runMatch);
+
+    // ========== 自定义荣誉 ==========
+    let customHonors = [];
+    function addCustomHonor() {
+      const input = document.getElementById("customHonorInput");
+      const name = input.value.trim();
+      if (!name) return;
+      if (customHonors.includes(name)) { input.value = ""; return; }
+      customHonors.push(name);
+      input.value = "";
+      renderCustomHonors();
+      runMatch();
+    }
+    function removeCustomHonor(name) {
+      customHonors = customHonors.filter(h => h !== name);
+      renderCustomHonors();
+      runMatch();
+    }
+    function renderCustomHonors() {
+      const box = document.getElementById("customHonors");
+      box.innerHTML = customHonors.map(h =>
+        `<span class="honor-tag" data-honor-del="${encodeURIComponent(h)}" role="button" tabindex="0">${esc(h)} <span class="del">×</span></span>`
+      ).join(" ");
+    }
+    document.getElementById("customHonorInput").addEventListener("keydown", e => {
+      if (e.key === "Enter") { e.preventDefault(); addCustomHonor(); }
+    });
+
+    // ========== 读取档案 ==========
+    function getProfile() {
+      const region = document.querySelector('input[name="region"]:checked')?.value || "jiangsu";
+      const majorSel = document.querySelector('#major input[name="major"]:checked, #majorXiaoxue input[name="major"]:checked');
+      return {
+        graduateYear: document.querySelector('input[name="graduateYear"]:checked')?.value || "",
+        degree: document.querySelector('input[name="degree"]:checked')?.value || "",
+        degreeType: document.querySelector('input[name="masterType"]:checked')?.value || "",
+        schoolType: document.querySelector('input[name="schoolType"]:checked')?.value || "",
+        bachelorSchoolType: document.querySelector('input[name="bachelorSchoolType"]:checked')?.value || "",
+        normalMajor: document.querySelector('input[name="normalMajor"]:checked')?.value || "",
+        specialStatus: Array.from(document.querySelectorAll('#specialStatus input:checked')).map(i => i.value),
+        politicalStatus: document.querySelector('input[name="politicalStatus"]:checked')?.value || "",
+        putonghua: document.querySelector('input[name="putonghua"]:checked')?.value || "",
+        scholarshipTimes: document.getElementById("scholarshipTimes").value || "",
+        region,
+        city: region === "jiangsu" ? citySel.value : "",
+        district: region === "jiangsu" ? districtSel.value : "",
+        otherProvince: region === "other" ? provinceSel.value : "",
+        certs: Array.from(document.querySelectorAll('#certsKg input:checked, #certsPrimary input:checked, #certsJunior input:checked, #certsSenior input:checked')).map(i => i.value),
+        honors: Array.from(document.querySelectorAll('#honors input:checked, #honorsScholarship input:checked, #honorsContest input:checked, #honorsAcademic input:checked')).map(i => i.value).concat(customHonors),
+        zongce: document.getElementById("zongce").value || "",
+        major: (majorSel?.value === "custom")
+          ? (document.getElementById("majorCustom").value || "")
+          : (majorSel?.value || ""),
+        majorBachelor: (document.getElementById("bachelorMajor") || {}).value?.trim() || "",
+        otherConditions: (document.getElementById("otherConditions") || {}).value?.trim() || "",
+      };
+    }
+
+    // ========== 匹配 + 渲染 ==========
+    let lastResult = [];
+
+    // HTML 转义（用户输入的内容要防注入）
+    function esc(s) {
+      return String(s).replace(/[&<>"']/g, c =>
+        ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    }
+
+    // 按当前学段显示招聘人数：优先学科明细 → 本学段小计 → 共招N人
+    // 注意：getStageSubjects（按学段拆分学科）已在 match.js 中实现为全局函数，
+    // 此处不可重复定义——内联脚本在 match.js 之后加载，同名函数会覆盖匹配引擎的新版逻辑。
+
+    function getDisplayCount(job) {
+      // count/posts 可能是数字类型（采集数据），统一转字符串防 c.match 崩溃
+      const c = String(job.count || "");
+      const s = currentStage;
+      if (!c) return "人数详见公告";
+      const subjects = "语文|数学|英语|科学|物理|化学|生物|政治|历史|地理|体育|音乐|美术|信息技术|心理健康|全科|道德与法治|思想政治|社会";
+      // 1. count 里的学科明细："小学语文4、数学2" / "其中小学语文1、小学科学1"
+      const cont = "(?:\\s*[/、]\\s*(?:" + subjects + ")\\s*\\d+\\s*[名人个]?)*";
+      const list1 = c.match(new RegExp(s + "(" + subjects + ")\\s*\\d+\\s*[名人个]?" + cont, "g"));
+      if (list1 && list1.length) return s + "：" + list1.map(x => x.replace(new RegExp("^" + s), "")).join("、");
+      // 2. posts 里的学科明细："高中语文2/数学2/英语4"
+      const list2 = String(job.posts || "").match(new RegExp(s + "(" + subjects + ")\\s*\\d+\\s*[名人个]?" + cont, "g"));
+      if (list2 && list2.length) return s + "：" + list2.map(x => x.replace(new RegExp("^" + s), "")).join("、") + "（详见岗位表）";
+      // 3. "其中小学64人" / "小学岗位73个"
+      let m = c.match(new RegExp("其中" + s + "(?:岗位|岗|学段)?\\s*(\\d+)\\s*[名人个]"));
+      if (m) return m[0].replace(/^其中/, "");
+      // 4. "中小学524名"这类带"中"前缀的不算小学单独数，但"幼儿园4名"直接匹配
+      m = c.match(new RegExp("(?<![中小])" + s + "(?:岗位|岗|学段)?\\s*(\\d+)\\s*[名人个]"));
+      if (m) return m[0];
+      // 5. "小学岗：语文4、数学2……"
+      m = c.match(new RegExp(s + "岗\\s*[:：]\\s*([\\u4e00-\\u9fa5]+[0-9]+(?:[、/][\\u4e00-\\u9fa5]+[0-9]+)*)"));
+      if (m) return s + "：" + m[1];
+      // 6. 岗位学段单一，整个招聘数就是本学段的
+      if (job.stage === s) return c;
+      // 7. 兜底：尝试抽出『共N名』/『合计N名』这种明确总数
+      const m7 = c.match(/(?:共招|共|合计|总计|全年)[^0-9]{0,8}?(\d{1,4})\s*[名人个项]/);
+      if (m7) return "共招 " + m7[1] + " 人";
+      // 8. 兜底：实在没法拆分，原样返回原 c（让 modalCount 直接呈现，不再追加学段副本导致重复）
+      return c;
+    }
+
+    // ========== 报名新鲜度判定 ==========
+    // enroll 字段格式很杂（"详见公告""未查到""12月3日-12月10日"等），抠不出确切日期就返回 null
+    function parseDeadline(enroll) {
+      if (!enroll) return null;
+      const s = String(enroll);
+      const re = /(?:(\d{4})年)?(\d{1,2})月(\d{1,2})日/g;
+      let m, year = null;
+      const dates = [];
+      while ((m = re.exec(s)) !== null) {
+        if (m[1]) year = parseInt(m[1], 10);
+        if (!year) continue;
+        dates.push(new Date(year, parseInt(m[2], 10) - 1, parseInt(m[3], 10)));
+      }
+      if (!dates.length) return null;
+      // 跨年修正：后一个日期早于前一个，说明跨年了（如 2025年12月25日-1月5日）
+      for (let i = 1; i < dates.length; i++) {
+        if (dates[i] < dates[i - 1]) {
+          dates[i] = new Date(dates[i].getFullYear() + 1, dates[i].getMonth(), dates[i].getDate());
+        }
+      }
+      return dates.reduce((a, b) => (b > a ? b : a));
+    }
+
+    function startOfToday() {
+      const d = new Date();
+      return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    }
+
+    function runMatch() {
+      if (typeof JOBS === "undefined" || typeof matchJobs === "undefined") return;
+      const profile = getProfile();
+      const bianzhiOnly = document.getElementById("bianzhiOnly").checked;
+      const result = window.matchJobs(profile, JOBS, { stage: currentStage, bianzhiOnly });
+      lastResult = result;
+
+      document.getElementById("resultTitle").textContent = `${currentStage} · 匹配结果`;
+
+      const resultArea = document.getElementById("resultArea");
+
+      if (result.length === 0) {
+        resultArea.innerHTML = `<div class="empty-tip">「${currentStage}」学段暂无岗位数据<br>其他学段数据后续补充</div>`;
+        return;
+      }
+
+      // 结果筛选：城市 + 批次
+      const cityFilter = document.getElementById("cityFilter").value;
+      const batchFilter = document.getElementById("batchFilter").value;
+      const masterFilter = document.getElementById("masterFilter").value;
+      const honorFilter = document.getElementById("honorFilter").value;
+      let shown = result;
+      if (cityFilter) shown = shown.filter(x => x.city === cityFilter);
+      if (batchFilter === "early") shown = shown.filter(x => x.early);
+      if (batchFilter === "social") shown = shown.filter(x => !x.early);
+      if (masterFilter === "need") shown = shown.filter(x => x.rules && x.rules.needMaster === true);
+      if (masterFilter === "none") shown = shown.filter(x => !(x.rules && x.rules.needMaster === true));
+      if (honorFilter === "yes") shown = shown.filter(x => x.rules && x.rules.honorGate);
+      if (honorFilter === "no") shown = shown.filter(x => !(x.rules && x.rules.honorGate));
+      const filtering = !!(cityFilter || batchFilter || masterFilter || honorFilter);
+
+      const ok = shown.filter(x => x.status === "可报");
+      const maybe = shown.filter(x => x.status === "待确认");
+      const no = shown.filter(x => x.status === "不符");
+
+      if (shown.length === 0) {
+        resultArea.innerHTML = `<div class="empty-tip">当前学段暂无岗位数据<br>其他学段数据后续补充</div>`;
+        return;
+      }
+
+      let html = "";
+      // 其他补充条件提醒
+      const otherCond = (profile.otherConditions || "").trim();
+      if (otherCond) {
+        html += `<div class="job-note" style="background:#FFF8E1;border:1px solid #F5E1A4;border-radius:8px;padding:8px 10px;">📌 你填写的其他条件：${esc(otherCond)}——请对每个岗位的公告原文逐条核对</div>`;
+      }
+      html += `<div class="summary-bar">
+        <div class="summary-item ok ${statusFilter === 'ok' ? 'active' : ''}" data-filter="ok" role="button" tabindex="0" style="color:var(--ok)"><div class="n">${ok.length}</div><div class="t">✅ 可报</div><div class="jump-hint">点击切换</div></div>
+        <div class="summary-item maybe ${statusFilter === 'maybe' ? 'active' : ''}" data-filter="maybe" role="button" tabindex="0" style="color:var(--maybe)"><div class="n">${maybe.length}</div><div class="t">⚠️ 待确认</div><div class="jump-hint">点击切换</div></div>
+        <div class="summary-item no ${statusFilter === 'no' ? 'active' : ''}" data-filter="no" role="button" tabindex="0" style="color:var(--no)"><div class="n">${no.length}</div><div class="t">❌ 不符</div><div class="jump-hint">点击切换</div></div>
+      </div>`;
+      if (filtering) {
+        html += `<div class="summary" style="font-size:12px;color:#8A97A5;margin:-6px 0 12px;">（已从 ${result.length} 条岗位中筛选）</div>`;
+      }
+
+      let listHtml = "";
+      if (statusFilter === 'no') {
+        // 「不符」拆两个子模块：仅届别不符（条件符合·参考）/ 条件不符
+        const noCohort = no.filter(x => x.cohortOnly);
+        const noReal = no.filter(x => !x.cohortOnly);
+        if (noCohort.length === 0 && noReal.length === 0) {
+          listHtml = `<div class="empty-tip" style="border:1px dashed var(--line);color:var(--ink-sub);padding:18px 12px;line-height:1.7">本学段暂无不符岗位。说明当前条件下岗位要么可报、要么待确认。</div>`;
+        } else {
+          // 两个可点击方块：点哪个只看哪一类
+          listHtml += `<div class="sub-bar">
+            <div class="sub-item cohort ${noSubFilter === 'cohort' ? 'active' : ''}" data-sub-filter="cohort" role="button" tabindex="0">
+              <div class="n">${noCohort.length}</div><div class="t">📋 条件符合</div><div class="hint">${noSubFilter === 'cohort' ? '✓ 只看此类' : '点击只看此类'}</div>
+            </div>
+            <div class="sub-item real ${noSubFilter === 'real' ? 'active' : ''}" data-sub-filter="real" role="button" tabindex="0">
+              <div class="n">${noReal.length}</div><div class="t">❌ 条件不符</div><div class="hint">${noSubFilter === 'real' ? '✓ 只看此类' : '点击只看此类'}</div>
+            </div>
+          </div>`;
+          const showCohort = (noSubFilter === 'all' || noSubFilter === 'cohort');
+          const showReal = (noSubFilter === 'all' || noSubFilter === 'real');
+          if (showCohort && noCohort.length) listHtml += `<div class="sub-group-title"><span class="dot cohort"></span>仅届别不符（其余条件均符合，可作参考样本）· ${noCohort.length} 条</div>` + noCohort.map(card).join("");
+          if (showReal && noReal.length) listHtml += `<div class="sub-group-title"><span class="dot real"></span>条件不符 · ${noReal.length} 条</div>` + noReal.map(card).join("");
+        }
+      } else {
+        const activeList = statusFilter === 'ok' ? ok : maybe;
+        if (activeList.length === 0) {
+          const tips = {
+            ok: "本学段暂无可报岗位。建议：①切换「待确认」看看风险点 ②切换其他学段 ③扩大城市/批次范围 ④核对教资与专业是否对口",
+            maybe: "本学段暂无待确认岗位。说明当前条件下岗位要么完全符合、要么硬性不符。"
+          };
+          listHtml = `<div class="empty-tip" style="border:1px dashed var(--line);color:var(--ink-sub);padding:18px 12px;line-height:1.7">${tips[statusFilter]}</div>`;
+        } else {
+          listHtml = activeList.map(card).join("");
+        }
+      }
+
+      function confBadge(job) {
+        if (job.dataConfidence === "official-attached") return '<span class="badge-conf conf-ok">✓ 官方附件</span>';
+        if (job.dataConfidence === "official") return '<span class="badge-conf conf-off">官方公告</span>';
+        if (job.dataConfidence === "third-party") return '<span class="badge-conf conf-warn">⚠ 转载·以官方为准</span>';
+        return "";
+      }
+      function card(job) {
+        const cls = job.cohortOnly ? "cohort" : job.status === "可报" ? "ok" : job.status === "待确认" ? "maybe" : "no";
+        const badge = job.early ? '<span class="badge-early">提前批</span>' : "";
+        const yearBadge = job.year ? `<span class="badge-year">${job.year}届</span>` : "";
+        const bianzhiBadge = /事业编|备案|员额|在编|全额/.test((job.staffing || "") + (job.batch || "")) ? '<span class="badge-bianzhi">编制</span>' : "";
+        const statusText = job.cohortOnly ? "📋 仅届别不符" : job.status === "可报" ? "✅ 可报" : job.status === "待确认" ? "⚠️ 待确认" : "❌ 不符";
+        const subjLine = (job.subjects && job.subjects.length) ? ` · 岗位学科：${job.subjects.join("、")}` : "";
+        const attLink = job.attachmentUrl
+          ? `<a class="job-att" href="${job.attachmentUrl}" target="_blank" rel="noopener">📎 原公告附件</a>`
+          : "";
+        const warnBar = job.dataConfidence === "third-party"
+          ? `<div class="card-warn">来源为第三方转载，具体条件以教育局官网公告为准</div>` : "";
+        // 命中资格/风险/原因展示
+        const hitNote = (job.notes || []).find(n => n.indexOf("资格已达标") !== -1) || "";
+        const hitBar = (job.status === "可报" && hitNote)
+          ? `<div class="job-hit">✓ ${esc(hitNote.replace("资格已达标：", ""))}</div>` : "";
+        const riskBar = (job.risks || []).slice(0, 2).map(r => `<div class="job-tip">⚠️ ${esc(r)}</div>`).join("");
+        const reasonBar = job.cohortOnly
+          ? `<div class="job-cohort">📋 仅届别不符：公告面向更早届别（您这届尚未到该批次报名）；经核对户籍/学历/专业/教资等条件您均符合，可作报考参考样本</div>`
+          : (job.reasons || []).slice(0, 2).map(r => `<div class="job-reason">❌ ${esc(r)}</div>`).join("");
+        const favCls = isFav(job.id) ? "active" : "";
+        const favStar = isFav(job.id) ? "★" : "☆";
+        return `
+          <div class="job-card ${cls}" data-job-id="${job.id}" role="button" tabindex="0">
+            <div class="job-title">
+              ${job.city} ${job.district || ""} · ${job.batch} ${yearBadge}${badge}${bianzhiBadge}
+              <span class="job-status">${statusText}</span>
+            </div>
+            <div class="job-info">${getDisplayCount(job)}</div>
+            <div class="job-sub">户籍：${job.hukouText} · 教资：${job.certText}${subjLine}</div>
+            ${hitBar}
+            ${riskBar}
+            ${reasonBar}
+            <div class="job-foot">
+              ${confBadge(job)}
+              ${attLink}
+              <span class="job-more">查看详情 ›</span>
+            </div>
+            <button class="fav-btn ${favCls}" title="收藏/取消收藏" data-fav-toggle="${job.id}" aria-label="收藏"><span class="star">${favStar}</span></button>
+            ${warnBar}
+          </div>
+        `;
+      }
+
+      html += listHtml;
+      resultArea.innerHTML = html;
+    }
+
+    document.getElementById("bianzhiOnly").addEventListener("change", runMatch);
+
+    // ========== 状态筛选标签 ==========
+    let statusFilter = 'ok';
+    let noSubFilter = 'all';  // all / cohort / real
+    function setStatusFilter(name) {
+      statusFilter = name;
+      if (name !== 'no') noSubFilter = 'all';
+      runMatch();
+    }
+    function setNoSubFilter(name) {
+      noSubFilter = (noSubFilter === name) ? 'all' : name;  // 再次点击取消，回到全部
+      runMatch();
+    }
+
+    // ========== 收藏 ==========
+    let favJobs = [];
+    function loadFav() {
+      try {
+        const raw = localStorage.getItem("favJobs");
+        favJobs = raw ? JSON.parse(raw) : [];
+      } catch (e) { favJobs = []; }
+      if (!Array.isArray(favJobs)) favJobs = [];
+      updateFavBadge();
+    }
+    function saveFav() {
+      localStorage.setItem("favJobs", JSON.stringify(favJobs));
+      updateFavBadge();
+    }
+    function isFav(id) {
+      return favJobs.some(x => x.id === id);
+    }
+    function toggleFav(event, id) {
+      event.stopPropagation();
+      const job = lastResult.find(j => j.id === id);
+      if (!job) return;
+      const idx = favJobs.findIndex(x => x.id === id);
+      if (idx >= 0) {
+        favJobs.splice(idx, 1);
+      } else {
+        favJobs.push({
+          id: id,
+          title: job.title || `${job.city} ${job.district || ""} · ${job.batch}`,
+          city: job.city,
+          district: job.district || "",
+          batch: job.batch,
+          status: job.status,
+          stage: job.stage,
+          enroll: job.enroll || "",
+          url: job.url || "",
+          addedAt: Date.now()
+        });
+      }
+      saveFav();
+      // 重绘当前学段结果里的收藏状态
+      runMatch();
+      // 如果时间线弹窗开着，刷新它
+      if (document.getElementById("timelineModal").classList.contains("show")) renderTimeline();
+    }
+    function removeFav(event, id) {
+      event.stopPropagation();
+      const idx = favJobs.findIndex(x => x.id === id);
+      if (idx >= 0) {
+        favJobs.splice(idx, 1);
+        saveFav();
+        runMatch();
+        renderTimeline();
+      }
+    }
+    function clearFavorites() {
+      if (!confirm("确定清空全部收藏？")) return;
+      favJobs = [];
+      saveFav();
+      runMatch();
+      renderTimeline();
+    }
+    function updateFavBadge() {
+      const el = document.getElementById("favCount");
+      if (el) {
+        el.textContent = favJobs.length;
+        el.style.display = favJobs.length ? "flex" : "none";
+      }
+    }
+
+    // 解析单个报名截止日期（取最晚一个）
+    function parseEndDate(enroll) {
+      const text = String(enroll || "");
+      const dates = [];
+      const re = /(\d{4})年(\d{1,2})月(\d{1,2})日/g;
+      let m;
+      while ((m = re.exec(text)) !== null) {
+        dates.push(new Date(parseInt(m[1], 10), parseInt(m[2], 10) - 1, parseInt(m[3], 10)));
+      }
+      if (!dates.length) return null;
+      // 跨年修正
+      for (let i = 1; i < dates.length; i++) {
+        if (dates[i] < dates[i - 1]) {
+          dates[i] = new Date(dates[i].getFullYear() + 1, dates[i].getMonth(), dates[i].getDate());
+        }
+      }
+      return dates.reduce((a, b) => (b > a ? b : a));
+    }
+
+    function openTimelineModal() {
+      renderTimeline();
+      document.getElementById("timelineModal").classList.add("show");
+    }
+
+    function renderTimeline() {
+      const wrap = document.getElementById("timelineChartWrap");
+      const list = document.getElementById("favList");
+      if (!favJobs.length) {
+        wrap.innerHTML = `<div class="empty-tip" style="padding:24px 0;">暂无收藏岗位<br>在匹配结果卡片右上角点 ☆ 收藏</div>`;
+        list.innerHTML = "";
+        return;
+      }
+      // 按报名截止日期排序，无日期放最后
+      const sorted = [...favJobs].map(f => {
+        const end = parseEndDate(f.enroll);
+        return { ...f, endDate: end, endTs: end ? end.getTime() : Infinity };
+      }).sort((a, b) => a.endTs - b.endTs);
+
+      // 渲染列表
+      list.innerHTML = sorted.map(f => {
+        const cls = f.status === "可报" ? "ok" : f.status === "待确认" ? "maybe" : "no";
+        const dateStr = f.endDate ? `${f.endDate.getFullYear()}-${String(f.endDate.getMonth() + 1).padStart(2, "0")}-${String(f.endDate.getDate()).padStart(2, "0")}` : "时间待确认";
+        return `<div class="fav-item" data-fav-open="${f.id}" role="button" tabindex="0">
+          <span class="fav-status ${cls}">${f.status.replace(/[✅⚠️❌]/g, "").trim()}</span>
+          <div class="fav-info">
+            <div class="fav-title">${esc(f.title)}</div>
+            <div class="fav-sub">${esc(f.city)} ${esc(f.district)} · ${f.batch} · 截止 ${dateStr}</div>
+          </div>
+          <span class="fav-del" title="取消收藏" data-fav-del="${f.id}" role="button" tabindex="0">×</span>
+        </div>`;
+      }).join("");
+
+      // 渲染垂直时间轴（按报名截止日期排序）
+      const withDate = sorted.filter(f => f.endDate);
+      if (!withDate.length) {
+        wrap.innerHTML = `<div class="empty-tip" style="padding:24px 0;">收藏岗位暂无明确报名截止日期，无法生成时间线</div>`;
+      } else {
+        const todayTs = startOfToday().getTime();
+        const nodes = withDate.map(f => {
+          const cls = f.status === "可报" ? "ok" : f.status === "待确认" ? "maybe" : "no";
+          const d = f.endDate;
+          const isPast = f.endTs < todayTs;
+          const dateLabel = `${d.getMonth() + 1}月${d.getDate()}日`;
+          const yearLabel = `${d.getFullYear()}年`;
+          const statusText = f.status.replace(/[✅⚠️❌]/g, "").trim();
+          const urlBtn = f.url
+            ? `<a href="${f.url}" target="_blank" rel="noopener">查看公告</a>`
+            : "";
+          return `
+            <div class="timeline-node ${cls}">
+              <span class="dot"></span>
+              <div class="date">${dateLabel}<small>${yearLabel}${isPast ? "· 已截止" : ""}</small></div>
+              <div class="card" data-fav-open="${f.id}" role="button" tabindex="0">
+                <div class="card-title">${esc(f.title)}<span class="card-status">${statusText}</span></div>
+                <div class="card-meta">${esc(f.city)} ${esc(f.district || "")} · ${f.batch}</div>
+                <div class="card-actions">
+                  ${urlBtn}
+                  <button data-fav-del="${f.id}">取消收藏</button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join("");
+        wrap.innerHTML = `<div class="timeline-axis-list">${nodes}</div>`;
+      }
+    }
+
+    // ========== 详情弹窗 ==========
+    function openDetail(id) {
+      let job = null;
+      if (typeof JOBS !== "undefined") job = JOBS.find(j => j.id === id);
+      if (!job && lastResult) job = lastResult.find(j => j.id === id);
+      if (!job) return;
+      document.getElementById("modalTitle").textContent = `${job.city} ${job.district || ""} · ${job.batch}`;
+      document.getElementById("modalTitle2").textContent = job.title || "";
+      document.getElementById("modalLocation").textContent = `${job.city} ${job.district || ""} · ${job.batch} · 学段：${job.stage}`;
+      document.getElementById("modalPosts").textContent = job.posts || "见岗位表";
+      // 招聘人数：直接显示完整原文（卡片上已展示本学段缩简列示）
+      // — 若与原文重复或无意义提取，则退回原文不再追加
+      const stageCnt = getDisplayCount(job);
+      document.getElementById("modalCount").textContent =
+        job.count || stageCnt || "见岗位表";
+      document.getElementById("modalStaffing").textContent = job.staffing || "待核实";
+      document.getElementById("modalEnroll").textContent = job.enroll || "未查到";
+      document.getElementById("modalExam").textContent = job.exam || "未查到";
+      document.getElementById("modalCondition").textContent = job.condition || "详见公告";
+      const notes = (job.notes || []);
+      const all = notes.concat(job.risks).concat(job.reasons);
+      document.getElementById("modalStatus").innerHTML = `<strong>${job.status}</strong> ${all.join("；") || "条件符合"}`;
+      const confEl = document.getElementById("modalConf");
+      const confMap = { "official-attached": '<span class="badge-conf conf-ok">✓ 官方附件（已核验岗位表）</span>',
+        "official": '<span class="badge-conf conf-off">官方公告页</span>',
+        "third-party": '<span class="badge-conf conf-warn">⚠ 第三方转载，以教育局官网为准</span>' };
+      confEl.innerHTML = confMap[job.dataConfidence] || (job.url ? "官方公告页" : "未标注");
+      const noteRow = document.getElementById("modalNoteRow");
+      const noteEl = document.getElementById("modalNote");
+      if (job.verifiedNote) { noteRow.style.display = "flex"; noteEl.textContent = job.verifiedNote; }
+      else noteRow.style.display = "none";
+      const link = document.getElementById("modalUrl");
+      if (job.url) { link.href = job.url; link.style.display = "inline-block"; }
+      else link.style.display = "none";
+      const attLink = document.getElementById("modalAtt");
+      if (job.attachmentUrl && job.attachmentUrl !== job.url) { attLink.href = job.attachmentUrl; attLink.style.display = "inline-block"; }
+      else attLink.style.display = "none";
+      document.getElementById("detailModal").classList.add("show");
+    }
+    function closeModal() {
+      document.getElementById("detailModal").classList.remove("show");
+    }
+    function closeTimelineModal() {
+      document.getElementById("timelineModal").classList.remove("show");
+    }
+
+    // ========== document 级事件委托（不依赖内联 onclick，兼容预览面板） ==========
+    document.addEventListener("click", function(e) {
+      // 链接（公告/附件）直接放行
+      if (e.target.closest("a")) return;
+      // 学段 tab
+      const stageTab = e.target.closest("[data-stage]");
+      if (stageTab) { switchStage(stageTab.dataset.stage); return; }
+      // 通用动作按钮
+      const act = e.target.closest("[data-action]");
+      if (act) {
+        const a = act.dataset.action;
+        if (a === "add-custom-honor") addCustomHonor();
+        else if (a === "clear-favorites") clearFavorites();
+        else if (a === "open-timeline") openTimelineModal();
+        else if (a === "close-detail") closeModal();
+        else if (a === "close-timeline") closeTimelineModal();
+        return;
+      }
+      // 自定义荣誉删除标签
+      const hd = e.target.closest("[data-honor-del]");
+      if (hd) { removeCustomHonor(decodeURIComponent(hd.dataset.honorDel)); return; }
+      // 时间线/收藏列表取消收藏
+      const fd = e.target.closest("[data-fav-del]");
+      if (fd) { removeFav(e, parseInt(fd.dataset.favDel, 10)); return; }
+      // 岗位卡片收藏按钮（须先于 data-job-id 判断）
+      const fb = e.target.closest("[data-fav-toggle]");
+      if (fb) { toggleFav(e, parseInt(fb.dataset.favToggle, 10)); return; }
+      // 收藏条目/时间线卡片 → 打开详情
+      const fo = e.target.closest("[data-fav-open]");
+      if (fo) { openDetail(parseInt(fo.dataset.favOpen, 10)); return; }
+      // 结果状态筛选（可报/待确认/不符）
+      const f = e.target.closest("[data-filter]");
+      if (f) { setStatusFilter(f.dataset.filter); return; }
+      // 不符子筛选（条件符合/条件不符）
+      const sf = e.target.closest("[data-sub-filter]");
+      if (sf) { setNoSubFilter(sf.dataset.subFilter); return; }
+      // 岗位卡片 → 打开详情
+      const jc = e.target.closest("[data-job-id]");
+      if (jc) { openDetail(parseInt(jc.dataset.jobId, 10)); return; }
+      // 弹窗遮罩空白处点击关闭
+      if (e.target.classList && e.target.classList.contains("modal-overlay")) {
+        e.target.classList.remove("show");
+      }
+    });
+    // 键盘可达性：Enter/空格 触发 role="button" 元素
+    document.addEventListener("keydown", function(e) {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      if (!e.target.closest) return;
+      const el = e.target.closest("[data-stage],[data-action],[data-honor-del],[data-filter],[data-sub-filter],[data-job-id],[data-fav-open]");
+      if (el) { e.preventDefault(); el.click(); }
+    });
+
+    // ========== 保存档案 ==========
+    document.getElementById("saveBtn").addEventListener("click", function() {
+      const profile = getProfile();
+      localStorage.setItem("userProfile", JSON.stringify(profile));
+      document.getElementById("msg").textContent = "✅ 档案已保存";
+      runMatch();
+    });
+
+    // ========== 页面加载：回填 + 自动匹配 ==========
+    window.addEventListener("load", function() {
+      const du = document.getElementById("dataUpdated");
+      if (du) du.textContent = (typeof DATA_UPDATED !== "undefined") ? DATA_UPDATED : "未知";
+      // 动态回填头部统计：在库岗位数
+      const sj = document.getElementById("statJobs");
+      if (sj && typeof JOBS !== "undefined") sj.textContent = JOBS.length;
+      const raw = localStorage.getItem("userProfile");
+      if (raw) {
+        try {
+          const p = JSON.parse(raw);
+          if (p.region) {
+            const r = document.querySelector(`input[name="region"][value="${p.region}"]`);
+            if (r) { r.checked = true; r.dispatchEvent(new Event("change")); }
+          }
+          ["graduateYear","degree","schoolType","bachelorSchoolType","politicalStatus"].forEach(name => {
+            if (p[name]) {
+              const el = document.querySelector(`input[name="${name}"][value="${p[name]}"]`);
+              if (el) el.checked = true;
+            }
+          });
+          // 普通话回填（旧值"一甲/一乙/二甲"映射到"二甲及以上"）
+          if (p.putonghua) {
+            const phv = (p.putonghua === '一甲' || p.putonghua === '一乙' || p.putonghua === '二甲') ? '二甲及以上' : p.putonghua;
+            const phEl = document.querySelector(`input[name="putonghua"][value="${phv}"]`);
+            if (phEl) phEl.checked = true;
+          }
+          if (p.scholarshipTimes) document.getElementById("scholarshipTimes").value = p.scholarshipTimes;
+          if (p.majorBachelor) document.getElementById("bachelorMajor").value = p.majorBachelor;
+          (p.specialStatus || []).forEach(v => {
+            const cb = document.querySelector(`#specialStatus input[value="${v}"]`);
+            if (cb) cb.checked = true;
+          });
+          if (p.city && cityDistricts[p.city]) {
+            citySel.value = p.city;
+            citySel.dispatchEvent(new Event("change"));
+            districtSel.value = p.district || "";
+          }
+          if (p.otherProvince) provinceSel.value = p.otherProvince;
+          (p.certs || []).forEach(v => {
+            const cb = document.querySelector(`#certsKg input[value="${v}"], #certsPrimary input[value="${v}"], #certsJunior input[value="${v}"], #certsSenior input[value="${v}"]`);
+            if (cb) cb.checked = true;
+          });
+          // 预设荣誉回填（自定义荣誉在 customHonors 里恢复）
+          (p.honors || []).forEach(v => {
+            const cb = document.querySelector(`#honors input[value="${v}"], #honorsScholarship input[value="${v}"], #honorsContest input[value="${v}"], #honorsAcademic input[value="${v}"]`);
+            if (cb) cb.checked = true;
+          });
+          customHonors = (p.honors || []).filter(v => !document.querySelector(`#honors input[value="${v}"], #honorsScholarship input[value="${v}"], #honorsContest input[value="${v}"], #honorsAcademic input[value="${v}"]`));
+          renderCustomHonors();
+          if (p.zongce) document.getElementById("zongce").value = p.zongce;
+          // 专业回填（预设学科/小学教育方向 或 自定义）
+          if (p.major) {
+            const preset = ["数学","语文","英语","科学","体育","音乐","美术","信息技术","心理健康","学前教育","特殊教育","道德与法治","历史与社会","思想政治","物理","化学","生物","历史","地理","通用技术","小学教育（数学方向）","小学教育（语文方向）","小学教育（其他方向）"];
+            const xiaoxueDirs = ["小学教育（数学方向）","小学教育（语文方向）","小学教育（其他方向）"];
+            if (preset.includes(p.major)) {
+              if (xiaoxueDirs.includes(p.major)) {
+                // 小学教育方向：勾选父选项"小学教育"并显示方向区，再勾方向
+                const parent = document.querySelector('input[name="major"][value="小学教育"]');
+                if (parent) {
+                  parent.checked = true;
+                  document.getElementById("majorXiaoxueBox").style.display = "block";
+                }
+                const dir = document.querySelector(`#majorXiaoxue input[name="major"][value="${p.major}"]`);
+                if (dir) dir.checked = true;
+              } else {
+                const el = document.querySelector(`input[name="major"][value="${p.major}"]`);
+                if (el) el.checked = true;
+              }
+            } else {
+              const cu = document.querySelector('input[name="major"][value="custom"]');
+              if (cu) {
+                cu.checked = true;
+                const box = document.getElementById("majorCustom");
+                box.style.display = "block";
+                box.value = p.major;
+              }
+            }
+          }
+          if (p.otherConditions) document.getElementById("otherConditions").value = p.otherConditions;
+          // 硕士时显示本科专业/本科院校层次输入框 + 标签改"硕士专业"/"硕士院校"
+          if (p.degree === "硕士") {
+            document.getElementById("bachelorMajorBox").style.display = "block";
+            document.getElementById("bachelorSchoolBox").style.display = "block";
+            const ml = document.getElementById("majorLabel");
+            if (ml) ml.textContent = "硕士专业（决定你能报哪个学科方向）";
+            const sl = document.getElementById("schoolTypeLabel");
+            if (sl) sl.textContent = "硕士院校层次";
+          }
+          // 户籍省内恢复并排布局
+          if (p.region === "jiangsu") document.getElementById("jiangsuHukouBox").style.display = "flex";
+          ["graduateYear","degree","schoolType","bachelorSchoolType","specialStatus","politicalStatus","normalMajor","major","region","certsKg","certsPrimary","certsJunior","certsSenior","honors","honorsScholarship","honorsContest","honorsAcademic","putonghua"].forEach(updateHighlight);
+        } catch (e) { console.log("读取档案失败", e); }
+      }
+      // 按默认学段（小学）初始化教资显示区，再跑一次匹配
+      loadFav();
+      switchStage(currentStage);
+    });
+  </script>
+
+  <script>
+  // 2027届提前批·最新官方公告（仅展示确证发布的官方公告，数据来自匹配库 year:2027）
+  function renderTrends(){
+    try {
+      var y27 = (typeof JOBS!=='undefined'?JOBS:[]).filter(function(j){return j.year===2027;});
+      var c = document.getElementById('trendsConfirmed');
+      if(c){
+        if(y27.length){
+          c.innerHTML = y27.map(function(j){
+            var loc = (j.city||'') + (j.district?('·'+j.district):'');
+            var meta = [j.posts, j.enroll].filter(Boolean).join(' ｜ ');
+            var link = (j.url)?'<a class="trend-link" href="'+j.url+'" target="_blank" rel="noopener">查看原公告 ↗</a>':'';
+            return '<div class="trend-item"><b>'+loc+'</b><br>'+ (j.title||'') + (meta?'<div class="trend-meta">'+meta+'</div>':'') + link +'</div>';
+          }).join('');
+        } else { c.innerHTML = '<div class="trend-empty">暂无官方已发布信息</div>'; }
+      }
+      var d = document.getElementById('trendsDate'); if(d){ d.textContent = (typeof DATA_UPDATED!=='undefined'&&DATA_UPDATED)?DATA_UPDATED:'—'; }
+      var sj = document.getElementById('statJobs'); if(sj && typeof JOBS!=='undefined'){ sj.textContent = JOBS.length; }
+    } catch(e){ console.log('renderTrends error', e); }
+  }
+  if(document.readyState!=='loading'){ renderTrends(); } else { document.addEventListener('DOMContentLoaded', renderTrends); }
+  </script>
+</body>
+</html>
