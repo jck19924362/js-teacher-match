@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231F8A4C'/%3E%3Ctext x='50' y='68' font-size='54' text-anchor='middle'%3E%F0%9F%8E%93%3C/text%3E%3C/svg%3E">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <title>江苏教师招聘智能匹配</title>
-  <!-- v20260905-3 绿色主题·组件多彩 -->
+  <!-- v20260906-2 浙江版功能对齐：结果搜索+收藏导出ICS/TXT+匹配计数+卡片考核行 -->
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -346,6 +347,7 @@
     .job-card.no .job-status { background: #C9CFD6; color: #fff; }
     .job-info { font-size: 14px; margin-top: 7px; font-weight: bold; color: var(--ink); }
     .job-sub { font-size: 12px; color: var(--ink-sub); margin-top: 4px; }
+    .job-exam { font-size: 12px; color: #5A3FB8; margin-top: 5px; line-height: 1.5; background: #F6F2FF; border-radius: 6px; padding: 5px 9px; }
     .job-tip { color: var(--maybe); font-size: 12px; margin-top: 6px; }
     .job-reason { color: var(--no); font-size: 12px; margin-top: 6px; }
     .job-cohort { background: #EBF1FF; border: 1px solid #BBD6F2; border-radius: 8px; padding: 6px 10px; color: #1F5C99; font-size: 12px; margin: 6px 0; line-height: 1.5; }
@@ -704,7 +706,7 @@
     <p class="slogan">3 分钟填好档案，立刻看清你能拿下哪些教师编制岗</p>
     <div class="hero-stats">
       <div class="hero-stat"><div class="num" id="statJobs">136</div><div class="lab">在库岗位</div></div>
-      <div class="hero-stat"><div class="num">13</div><div class="lab">覆盖地市</div></div>
+      <div class="hero-stat"><div class="num" id="statCities">13</div><div class="lab">覆盖地市</div></div>
       <div class="hero-stat"><div class="num">4</div><div class="lab">学段维度</div></div>
     </div>
     <div class="stage-nav">
@@ -1067,6 +1069,9 @@
         <option value="no">无荣誉门槛</option>
       </select>
     </div>
+    <div class="filter-bar" style="gap:12px;">
+      <input id="resultSearch" type="text" placeholder="🔍 在结果中搜索：城市 / 学科 / 关键词（如：苏州、数学、提前批）" style="width:100%;flex:1;margin-bottom:0;padding:9px 12px;font-size:14px;border:1px solid #D0D7DE;border-radius:8px;">
+    </div>
 
     <div class="card round" style="padding:16px;">
       <div class="section-title" id="resultTitle">匹配结果</div>
@@ -1113,8 +1118,11 @@
         <span style="margin-left:auto;">按公告报名截止日期排序</span>
       </div>
       <div class="timeline-actions">
+        <button data-action="export-fav-ics">📅 导出日历(.ics)</button>
+        <button data-action="export-fav-txt">📋 导出清单</button>
         <button data-action="clear-favorites">清空收藏</button>
       </div>
+      <div style="font-size:12px;color:#8A94A6;margin:-6px 2px 10px;">💡 手机导出建议用系统自带浏览器（Safari/Chrome）打开本页；微信内打开可能会拦截文件下载。</div>
       <div class="timeline-chart-wrap" id="timelineChartWrap">
         <div class="empty-tip" style="padding:24px 0;">暂无收藏岗位<br>在匹配结果卡片右下角点 ☆ 收藏</div>
       </div>
@@ -1132,7 +1140,7 @@
   <div class="site-foot">
     <div>© 2026 江苏教师招聘智能匹配 · 数据整理自各地教育局公开招聘公告 · 仅供个人参考，结果转请至原公告</div>
     <div class="site-foot-stat">
-      累计访问 <span id="busuanzi_value_site_pv">0</span> · 访客 <span id="busuanzi_value_site_uv">0</span>
+      累计访问 <span id="busuanzi_value_site_pv">0</span> · 访客 <span id="busuanzi_value_site_uv">0</span> · 本机已完成匹配 <span id="matchCount">0</span> 次
     </div>
   </div>
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
@@ -1256,6 +1264,7 @@
     document.getElementById("batchFilter").addEventListener("change", runMatch);
     document.getElementById("masterFilter").addEventListener("change", runMatch);
     document.getElementById("honorFilter").addEventListener("change", runMatch);
+    document.getElementById("resultSearch").addEventListener("input", runMatch);
 
     // ========== 专业（选"其他"显示自定义输入框；选"小学教育"显示方向选择） ==========
     document.querySelectorAll('input[name="major"]').forEach(r => {
@@ -1443,6 +1452,7 @@
       const bianzhiOnly = document.getElementById("bianzhiOnly").checked;
       const result = window.matchJobs(profile, JOBS, { stage: currentStage, bianzhiOnly });
       lastResult = result;
+      bumpMatchCount();
 
       document.getElementById("resultTitle").textContent = `${currentStage} · 匹配结果`;
 
@@ -1458,6 +1468,7 @@
       const batchFilter = document.getElementById("batchFilter").value;
       const masterFilter = document.getElementById("masterFilter").value;
       const honorFilter = document.getElementById("honorFilter").value;
+      const searchTerm = (document.getElementById("resultSearch").value || "").trim();
       let shown = result;
       if (cityFilter) shown = shown.filter(x => x.city === cityFilter);
       if (batchFilter === "early") shown = shown.filter(x => x.early);
@@ -1466,7 +1477,14 @@
       if (masterFilter === "none") shown = shown.filter(x => !(x.rules && x.rules.needMaster === true));
       if (honorFilter === "yes") shown = shown.filter(x => x.rules && x.rules.honorGate);
       if (honorFilter === "no") shown = shown.filter(x => !(x.rules && x.rules.honorGate));
-      const filtering = !!(cityFilter || batchFilter || masterFilter || honorFilter);
+      if (searchTerm) {
+        const kw = searchTerm.toLowerCase();
+        shown = shown.filter(x => {
+          const hay = [x.title, x.city, x.district, x.batch, x.posts, x.count, (x.subjects || []).join("/")].join(" ").toLowerCase();
+          return hay.indexOf(kw) !== -1;
+        });
+      }
+      const filtering = !!(cityFilter || batchFilter || masterFilter || honorFilter || searchTerm);
 
       const ok = shown.filter(x => x.status === "可报");
       const maybe = shown.filter(x => x.status === "待确认");
@@ -1563,6 +1581,7 @@
             </div>
             <div class="job-info">${getDisplayCount(job)}</div>
             <div class="job-sub">户籍：${job.hukouText} · 教资：${job.certText}${subjLine}</div>
+            ${job.exam ? `<div class="job-exam">📝 考核：${esc(job.exam)}</div>` : ""}
             ${hitBar}
             ${riskBar}
             ${reasonBar}
@@ -1682,6 +1701,83 @@
         }
       }
       return dates.reduce((a, b) => (b > a ? b : a));
+    }
+
+    // ========== 收藏导出 ==========
+    function downloadBlob(filename, content, mime) {
+      try {
+        // 用 BOM 让 Windows 记事本/Office 正确识别 UTF-8
+        const blob = new Blob(["\ufeff" + content], { type: mime || "text/plain;charset=utf-8" });
+        // 转成 base64 data URL 再触发下载，避免 blob: URL 被浏览器/Windows 当成"要打开的外部链接"弹应用选择框
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const a = document.createElement("a");
+          a.href = e.target.result;
+          a.download = filename;
+          a.style.display = "none";
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(function () { document.body.removeChild(a); }, 200);
+        };
+        reader.readAsDataURL(blob);
+      } catch (e) {
+        alert("导出失败：" + e.message);
+      }
+    }
+
+    function buildFavText() {
+      const lines = ["江苏教师招聘 · 我的收藏清单", "导出时间：" + new Date().toLocaleString("zh-CN"), ""];
+      favJobs.forEach(function (f, i) {
+        const end = parseEndDate(f.enroll);
+        const dateStr = end ? (end.getFullYear() + "-" + String(end.getMonth() + 1).padStart(2, "0") + "-" + String(end.getDate()).padStart(2, "0")) : "时间待确认";
+        lines.push((i + 1) + ". 【" + (f.status || "") + "】" + (f.title || (f.city + " " + (f.district || ""))));
+        lines.push("   地区：" + f.city + " " + (f.district || "") + " · " + (f.batch || "") + " · 截止 " + dateStr);
+        if (f.url) lines.push("   公告：" + f.url);
+        lines.push("");
+      });
+      return lines.join("\n");
+    }
+
+    function exportFavTxt() {
+      if (!favJobs.length) { alert("还没有收藏的岗位"); return; }
+      downloadBlob("江苏教师招聘_收藏清单.txt", buildFavText(), "text/plain;charset=utf-8");
+    }
+
+    function exportFavICS() {
+      if (!favJobs.length) { alert("还没有收藏的岗位"); return; }
+      const pad = function (n) { return String(n).padStart(2, "0"); };
+      const toDateStr = function (d) { return d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()); };
+      const events = [];
+      favJobs.forEach(function (f) {
+        const end = parseEndDate(f.enroll);
+        if (!end) return;
+        const end2 = new Date(end.getTime() + 86400000); // 截止日当天提醒，结束日 +1
+        const summary = "江苏教师招聘截止：" + (f.title || (f.city + " " + (f.district || "")));
+        const desc = f.city + " " + (f.district || "") + " · " + (f.batch || "") + (f.url ? " 公告：" + f.url : "");
+        events.push(
+          "BEGIN:VEVENT\r\n" +
+          "UID:" + f.id + "@js-teacher-match\r\n" +
+          "DTSTART;VALUE=DATE:" + toDateStr(end) + "\r\n" +
+          "DTEND;VALUE=DATE:" + toDateStr(end2) + "\r\n" +
+          "SUMMARY:" + summary + "\r\n" +
+          "DESCRIPTION:" + desc + "\r\n" +
+          "END:VEVENT"
+        );
+      });
+      if (!events.length) { alert("收藏的岗位暂无明确的报名截止日期，无法生成日历，可改用「导出清单」"); return; }
+      const ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//js-teacher-match//CN", "CALSCALE:GREGORIAN"]
+        .concat(events).concat(["END:VCALENDAR"]).join("\r\n") + "\r\n";
+      downloadBlob("江苏教师招聘_报考日历.ics", ics, "text/calendar;charset=utf-8");
+    }
+
+    // ========== 使用量统计（本机匹配次数，纯本地存储，不上传） ==========
+    function bumpMatchCount() {
+      try {
+        const n = (parseInt(localStorage.getItem("matchCount") || "0", 10) || 0) + 1;
+        localStorage.setItem("matchCount", String(n));
+        const el = document.getElementById("matchCount");
+        if (el) el.textContent = n;
+      } catch (e) {}
     }
 
     function openTimelineModal() {
@@ -1812,6 +1908,8 @@
         if (a === "add-custom-honor") addCustomHonor();
         else if (a === "clear-favorites") clearFavorites();
         else if (a === "open-timeline") openTimelineModal();
+        else if (a === "export-fav-ics") exportFavICS();
+        else if (a === "export-fav-txt") exportFavTxt();
         else if (a === "close-detail") closeModal();
         else if (a === "close-timeline") closeTimelineModal();
         return;
@@ -1865,6 +1963,10 @@
       // 动态回填头部统计：在库岗位数
       const sj = document.getElementById("statJobs");
       if (sj && typeof JOBS !== "undefined") sj.textContent = JOBS.length;
+      const sc = document.getElementById("statCities");
+      if (sc && typeof JOBS !== "undefined") sc.textContent = new Set(JOBS.map(j => j.city)).size;
+      const mc = document.getElementById("matchCount");
+      if (mc) { try { mc.textContent = localStorage.getItem("matchCount") || "0"; } catch (e) {} }
       const raw = localStorage.getItem("userProfile");
       if (raw) {
         try {
@@ -1976,6 +2078,7 @@
       }
       var d = document.getElementById('trendsDate'); if(d){ d.textContent = (typeof DATA_UPDATED!=='undefined'&&DATA_UPDATED)?DATA_UPDATED:'—'; }
       var sj = document.getElementById('statJobs'); if(sj && typeof JOBS!=='undefined'){ sj.textContent = JOBS.length; }
+      var sc = document.getElementById('statCities'); if(sc && typeof JOBS!=='undefined'){ sc.textContent = new Set(JOBS.map(function(j){return j.city;})).size; }
     } catch(e){ console.log('renderTrends error', e); }
   }
   if(document.readyState!=='loading'){ renderTrends(); } else { document.addEventListener('DOMContentLoaded', renderTrends); }
