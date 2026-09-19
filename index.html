@@ -8,7 +8,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <title>江苏教师招聘智能匹配</title>
-  <!-- v20260918-3 招聘人数补上下文 + 勾教资不再切学段 + 刷新恢复档案不再丢字段/不被改专业 + 公告空态文案 -->
+  <!-- v20260919-1 0可报时说明"条件已够着N个岗位、只是届别未到"（避免访客误判）+ 底部统计手机端不再断字 -->
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -403,10 +403,12 @@
     .site-foot a { color: #8A97A5; }
     .site-foot-stat {
       margin-top: 10px; font-size: 12px; color: #B9C2CE;
-      display: inline-flex; align-items: center; gap: 6px;
+      display: inline-flex; flex-wrap: wrap; justify-content: center;
+      align-items: center; gap: 2px 10px;
       padding: 3px 12px; border-radius: 999px;
       background: rgba(155,155,155,0.06);
     }
+    .site-foot-stat .foot-seg { white-space: nowrap; }
     .summary { font-size: 14px; color: var(--ink-sub); margin-bottom: 14px; }
     .summary b { font-size: 16px; }
     .summary-bar {
@@ -1140,7 +1142,9 @@
   <div class="site-foot">
     <div>© 2026 江苏教师招聘智能匹配 · 数据整理自各地教育局公开招聘公告 · 仅供个人参考，结果转请至原公告</div>
     <div class="site-foot-stat">
-      累计访问 <span id="busuanzi_value_site_pv">0</span> · 访客 <span id="busuanzi_value_site_uv">0</span> · 本机已完成匹配 <span id="matchCount">0</span> 次
+      <span class="foot-seg">累计访问 <span id="busuanzi_value_site_pv">0</span></span>
+      <span class="foot-seg">访客 <span id="busuanzi_value_site_uv">0</span></span>
+      <span class="foot-seg">本机已完成匹配 <span id="matchCount">0</span> 次</span>
     </div>
   </div>
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
@@ -1515,6 +1519,18 @@
       if (filtering) {
         html += `<div class="summary" style="font-size:12px;color:#8A97A5;margin:-6px 0 12px;">（已从 ${result.length} 条岗位中筛选）</div>`;
       }
+      // 【人性化】0 可报但存在「仅届别不符」岗位时，明确告诉访客：不是你的条件不行，是公告还没轮到这一届
+      const cohortHintCount = no.filter(x => x.cohortOnly).length;
+      if (ok.length === 0 && cohortHintCount > 0) {
+        // 年份动态推导，避免将来入库新一年公告后说错
+        const cohortYears = [...new Set(no.filter(x => x.cohortOnly).map(x => x.year).filter(Boolean))].sort();
+        const yearsLabel = cohortYears.length ? cohortYears.join(" / ") + " 届" : "更早届别";
+        const isNumYear = /^\d{4}$/.test(profile.graduateYear || "");
+        const futureMsg = isNumYear
+          ? `${profile.graduateYear}届的提前批公告尚未开始发布`
+          : `面向你这一届的公告尚未开始发布`;
+        html += `<div class="cohort-banner" style="background:#EAF7EF;border:1px solid #A8DDB8;border-left:4px solid var(--ok,#2E9E5B);border-radius:8px;padding:10px 12px;margin:0 0 12px;line-height:1.7;color:#1B5E35;font-size:13px;">💡 <b>你的条件其实够得着 ${cohortHintCount} 个岗位</b>，但库内现有岗位都是面向 ${yearsLabel}的<b>已发布公告</b>。${futureMsg}，一经发布会第一时间纳入匹配。想先看看这批岗位的考情，点结果区上方的「❌ 不符」→「📋 条件符合」。</div>`;
+      }
 
       let listHtml = "";
       if (statusFilter === 'no') {
@@ -1545,7 +1561,12 @@
             ok: "本学段暂无可报岗位。建议：①切换「待确认」看看风险点 ②切换其他学段 ③扩大城市/批次范围 ④核对教资与专业是否对口",
             maybe: "本学段暂无待确认岗位。说明当前条件下岗位要么完全符合、要么硬性不符。"
           };
-          listHtml = `<div class="empty-tip" style="border:1px dashed var(--line);color:var(--ink-sub);padding:18px 12px;line-height:1.7">${tips[statusFilter]}</div>`;
+          const cohortOnlyCount = no.filter(x => x.cohortOnly).length;
+          let tipText = tips[statusFilter];
+          if (statusFilter === "ok" && cohortOnlyCount > 0) {
+            tipText = `本学段暂无可报岗位 —— 但不是你的条件不行：库内岗位均面向更早届别，你的条件已符合其中 ${cohortOnlyCount} 个（详见上方说明）。建议：①点「❌ 不符」→「📋 条件符合」看这批上一届同类岗位作参考 ②切换「⚠️ 待确认」看看风险点 ③切换其他学段`;
+          }
+          listHtml = `<div class="empty-tip" style="border:1px dashed var(--line);color:var(--ink-sub);padding:18px 12px;line-height:1.7">${tipText}</div>`;
         } else {
           listHtml = activeList.map(card).join("");
         }

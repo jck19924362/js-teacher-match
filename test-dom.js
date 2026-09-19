@@ -127,6 +127,29 @@ window.addEventListener('load', () => {
     window.switchStage('小学');
     t('切学段往返后方向仍勾选', dirRadio.checked);
     t('切学段往返后语文未被误勾', !document.querySelector('input[name="major"][value="语文"]').checked);
+
+    console.log('== 0可报时的届别人性化提示（回归：曾只显示"条件不符"，访客误以为自己不行）==');
+    // 2027届 + 师范 + 本科 + 小学数学教资 → 库内均为 2026 届公告，0 可报但大量"仅届别不符"
+    const pick = (sel) => { const el = document.querySelector(sel); if (el) { el.checked = true; el.dispatchEvent(new window.Event('change', { bubbles: true })); } return el; };
+    pick('input[name="graduateYear"][value="2027"]');
+    pick('input[name="normalMajor"][value="师范类"]');
+    pick('input[name="degree"][value="本科"]');
+    const certPri = document.querySelector('#certsPrimary input[value="小学数学"]');
+    certPri.checked = true; click(certPri);
+    window.switchStage('小学');
+    const bannerEl = document.querySelector('.cohort-banner');
+    const bannerTxt = bannerEl ? bannerEl.textContent.replace(/\s+/g, ' ') : '';
+    t('0可报时出现"够得着N个岗位"说明条', !!bannerEl && /够得着\s*\d+\s*个岗位/.test(bannerTxt));
+    t('说明条年份动态推导（面向YYYY届）', /面向\s*\d{4}\s*届/.test(bannerTxt));
+    t('0可报空态提示点明不是条件问题', document.getElementById('resultArea').textContent.indexOf('不是你的条件不行') !== -1);
+    // 还原档案，避免污染后续用例（空档案下岗位卡片正常显示）
+    ['graduateYear', 'normalMajor', 'degree'].forEach(nm => {
+      document.querySelectorAll(`input[name="${nm}"]`).forEach(r => { r.checked = false; });
+    });
+    const cpReset = document.querySelector('#certsPrimary input[value="小学数学"]');
+    if (cpReset) cpReset.checked = false;
+    window.switchStage('初中');
+    window.switchStage('小学');
     dirRadio.checked = false; // 还原
 
     console.log('== 状态筛选 ==');
