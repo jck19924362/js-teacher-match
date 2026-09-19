@@ -8,7 +8,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <title>江苏教师招聘智能匹配</title>
-  <!-- v20260906-2 浙江版功能对齐：结果搜索+收藏导出ICS/TXT+匹配计数+卡片考核行 -->
+  <!-- v20260918-3 招聘人数补上下文 + 勾教资不再切学段 + 刷新恢复档案不再丢字段/不被改专业 + 公告空态文案 -->
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -725,7 +725,7 @@
       <span class="trends-sub">数据更新于 <span id="trendsDate">—</span></span>
     </div>
     <div id="trendsConfirmed"></div>
-    <div class="trends-foot">以上为确证发布的官方公告，已纳入下方资格匹配；更多地区公告发布后将持续补充。</div>
+    <div class="trends-foot" id="trendsFoot">以上为确证发布的官方公告，已纳入下方资格匹配；更多地区公告发布后将持续补充。</div>
   </div>
 
   <div class="container">
@@ -1215,6 +1215,11 @@
           if (input && input.checked) currentCheckedVisible = true;
         }
       });
+      // 小学教育方向区已勾选的也算"当前有选中项"——否则切学段或刷新恢复后，
+      // 会被误判为未选专业而强行勾上第一个可见选项（语文），静默改写用户专业
+      if (Array.from(document.querySelectorAll('#majorXiaoxue input[name="major"]')).some(i => i.checked)) {
+        currentCheckedVisible = true;
+      }
       // 小学教育方向区只在"小学"学段显示
       document.getElementById("majorXiaoxueBox").style.display =
         (stage === "小学") ? document.getElementById("majorXiaoxueBox").style.display : "none";
@@ -1409,12 +1414,13 @@
       // 5. "小学岗：语文4、数学2……"
       m = c.match(new RegExp(s + "岗\\s*[:：]\\s*([\\u4e00-\\u9fa5]+[0-9]+(?:[、/][\\u4e00-\\u9fa5]+[0-9]+)*)"));
       if (m) return s + "：" + m[1];
-      // 6. 岗位学段单一，整个招聘数就是本学段的
-      if (job.stage === s) return c;
+      // 6. 岗位学段单一，整个招聘数就是本学段的（补上下文，避免卡片出现裸数字）
+      if (job.stage === s) return /^\d+$/.test(c) ? "本批共招 " + c + " 名" : "本批共招 " + c;
       // 7. 兜底：尝试抽出『共N名』/『合计N名』这种明确总数
       const m7 = c.match(/(?:共招|共|合计|总计|全年)[^0-9]{0,8}?(\d{1,4})\s*[名人个项]/);
       if (m7) return "共招 " + m7[1] + " 人";
-      // 8. 兜底：实在没法拆分，原样返回原 c（让 modalCount 直接呈现，不再追加学段副本导致重复）
+      // 8. 兜底：纯数字是全批次合计（多学段混合岗），补上下文；文本原样返回
+      if (/^\d+$/.test(c)) return "全批次共招 " + c + " 名（含多学段，详见岗位表）";
       return c;
     }
 
@@ -1858,11 +1864,13 @@
       document.getElementById("modalTitle2").textContent = job.title || "";
       document.getElementById("modalLocation").textContent = `${job.city} ${job.district || ""} · ${job.batch} · 学段：${job.stage}`;
       document.getElementById("modalPosts").textContent = job.posts || "见岗位表";
-      // 招聘人数：直接显示完整原文（卡片上已展示本学段缩简列示）
-      // — 若与原文重复或无意义提取，则退回原文不再追加
+      // 招聘人数：纯数字补「共 X 名」，其余原文直接显示
       const stageCnt = getDisplayCount(job);
+      const rawCnt = String(job.count || "");
       document.getElementById("modalCount").textContent =
-        job.count || stageCnt || "见岗位表";
+        rawCnt
+          ? (/^\d+$/.test(rawCnt) ? "共 " + rawCnt + " 名" : rawCnt)
+          : (stageCnt || "见岗位表");
       document.getElementById("modalStaffing").textContent = job.staffing || "待核实";
       document.getElementById("modalEnroll").textContent = job.enroll || "未查到";
       document.getElementById("modalExam").textContent = job.exam || "未查到";
@@ -1898,8 +1906,8 @@
     document.addEventListener("click", function(e) {
       // 链接（公告/附件）直接放行
       if (e.target.closest("a")) return;
-      // 学段 tab
-      const stageTab = e.target.closest("[data-stage]");
+      // 学段 tab（只认 .stage-tab，避免命中教资面板的 data-stage 导致勾选时静默切学段）
+      const stageTab = e.target.closest(".stage-tab[data-stage]");
       if (stageTab) { switchStage(stageTab.dataset.stage); return; }
       // 通用动作按钮
       const act = e.target.closest("[data-action]");
@@ -1944,7 +1952,7 @@
     document.addEventListener("keydown", function(e) {
       if (e.key !== "Enter" && e.key !== " ") return;
       if (!e.target.closest) return;
-      const el = e.target.closest("[data-stage],[data-action],[data-honor-del],[data-filter],[data-sub-filter],[data-job-id],[data-fav-open]");
+      const el = e.target.closest(".stage-tab[data-stage],[data-action],[data-honor-del],[data-filter],[data-sub-filter],[data-job-id],[data-fav-open]");
       if (el) { e.preventDefault(); el.click(); }
     });
 
@@ -1975,7 +1983,7 @@
             const r = document.querySelector(`input[name="region"][value="${p.region}"]`);
             if (r) { r.checked = true; r.dispatchEvent(new Event("change")); }
           }
-          ["graduateYear","degree","schoolType","bachelorSchoolType","politicalStatus"].forEach(name => {
+          ["graduateYear","degree","schoolType","bachelorSchoolType","politicalStatus","normalMajor"].forEach(name => {
             if (p[name]) {
               const el = document.querySelector(`input[name="${name}"][value="${p[name]}"]`);
               if (el) el.checked = true;
@@ -2051,7 +2059,7 @@
           }
           // 户籍省内恢复并排布局
           if (p.region === "jiangsu") document.getElementById("jiangsuHukouBox").style.display = "flex";
-          ["graduateYear","degree","schoolType","bachelorSchoolType","specialStatus","politicalStatus","normalMajor","major","region","certsKg","certsPrimary","certsJunior","certsSenior","honors","honorsScholarship","honorsContest","honorsAcademic","putonghua"].forEach(updateHighlight);
+          ["graduateYear","degree","schoolType","bachelorSchoolType","specialStatus","politicalStatus","normalMajor","major","majorXiaoxue","region","certsKg","certsPrimary","certsJunior","certsSenior","honors","honorsScholarship","honorsContest","honorsAcademic","putonghua"].forEach(updateHighlight);
         } catch (e) { console.log("读取档案失败", e); }
       }
       // 按默认学段（小学）初始化教资显示区，再跑一次匹配
@@ -2076,6 +2084,10 @@
           }).join('');
         } else { c.innerHTML = '<div class="trend-empty">暂无官方已发布信息</div>'; }
       }
+      var foot = document.getElementById('trendsFoot');
+      if(foot){ foot.textContent = y27.length
+        ? '以上为确证发布的官方公告，已纳入下方资格匹配；更多地区公告发布后将持续补充。'
+        : '2027届提前批公告尚未开始发布，我们将每周自动巡检各地市教育局官网，公告一经发布就第一时间更新到这里并纳入匹配。'; }
       var d = document.getElementById('trendsDate'); if(d){ d.textContent = (typeof DATA_UPDATED!=='undefined'&&DATA_UPDATED)?DATA_UPDATED:'—'; }
       var sj = document.getElementById('statJobs'); if(sj && typeof JOBS!=='undefined'){ sj.textContent = JOBS.length; }
       var sc = document.getElementById('statCities'); if(sc && typeof JOBS!=='undefined'){ sc.textContent = new Set(JOBS.map(function(j){return j.city;})).size; }
